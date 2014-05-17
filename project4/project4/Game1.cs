@@ -9,8 +9,6 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 #endregion
 
-//test git
-
 namespace project4
 {
     /// <summary>
