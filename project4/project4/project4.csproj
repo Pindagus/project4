@@ -36,6 +36,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Map\BaseTile.cs" />
+    <Compile Include="Map\Structure\Map1.cs" />
+    <Compile Include="Map\Structure\Map2.cs" />
+    <Compile Include="Map\TileMap.cs" />
+    <Compile Include="Map\Tiles\Brown.cs" />
+    <Compile Include="Map\Tiles\Concrete.cs" />
+    <Compile Include="Map\Tiles\Dirt.cs" />
+    <Compile Include="Map\Tiles\Grass.cs" />
+    <Compile Include="Map\Tiles\Stone.cs" />
+    <Compile Include="Map\Tiles\Water.cs" />
+    <Compile Include="Map\Tiles\Wood.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -60,11 +71,12 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Textures\TileSet\TileSet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
