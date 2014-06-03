@@ -23,8 +23,8 @@ namespace project4
         protected int MapHeight = 30;
 
         //part that will be visible of the map
-        protected int squaresAcross = 10;
-        protected int squaresDown = 10;
+        protected int squaresAcross = 12;
+        protected int squaresDown = 12;
 
         //offset of whole map
         protected int baseOffsetX = 0;
@@ -119,6 +119,7 @@ namespace project4
             }
 
             base.Draw(gameTime);
-        }  
+        }
     }
 }
+
