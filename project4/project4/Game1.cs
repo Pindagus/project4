@@ -28,6 +28,10 @@ namespace project4
 
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+
+            graphics.IsFullScreen = true;
 
             //creates new map, to create new map with new structure you have to make new class in Map/Structure directory
             //check code of the two example maps
