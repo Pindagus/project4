@@ -113,7 +113,7 @@ namespace project4
                     Game1.spriteBatch.Draw(
                     _tileSetTexture,
                         new Rectangle((x * currentTile.getTileWidth) - baseOffsetX, (y * currentTile.getTileHeight) + baseOffsetY, currentTile.getTileWidth, currentTile.getTileHeight),
-                        currentTile.GetSourceRectangle(currentTile.TileInt),
+                        currentTile.GetSourceRectangle(currentTile.getTileInt),
                     Color.White);
                 }
             }

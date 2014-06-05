@@ -7,18 +7,12 @@ namespace project4
 {
     class Wood : BaseTile
     {
-        public int getTileInt
+        override public int getTileInt
         {
             get
             {
-                return TileInt;
+                return 5;
             }
-        }
-
-        public Wood()
-            : base(5)
-        {
-
         }
     }
 }

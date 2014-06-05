@@ -7,18 +7,13 @@ namespace project4
 {
     class Brown : BaseTile
     {
-        public int getTileInt
+
+        public override int getTileInt
         {
-            get
-            {
-                return TileInt;
+            get {
+                return 0;    
             }
         }
 
-        public Brown()
-            : base(0)
-        {
-
-        }
     }
 }

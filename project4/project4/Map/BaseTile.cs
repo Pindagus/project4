@@ -6,12 +6,12 @@ using System.Text;
 
 namespace project4
 {
-    class BaseTile
+    abstract class BaseTile
     {
         private int TileWidth = 101;
         private int TileHeight = 84;
 
-        public int TileInt;
+        public abstract int getTileInt { get; }
 
         public int getTileWidth
         {
@@ -35,12 +35,6 @@ namespace project4
             int tileX = TileInt % (TileMap._tileSetTexture.Width / TileWidth);
 
             return new Rectangle(tileX * TileWidth, tileY * TileHeight, TileWidth, TileHeight);
-        }
-
-        //constructor
-        public BaseTile(int _TileInt)
-        {
-            TileInt = _TileInt;
         }
     }
 }
