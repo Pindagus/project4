@@ -36,9 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
-    <Compile Include="Level\BaseLevel.cs" />
-    <Compile Include="Level\FirstLevel.cs" />
-    <Compile Include="Level\LastLevel.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Map\BaseTile.cs" />
     <Compile Include="Map\Structure\LastLevelMap.cs" />
     <Compile Include="Map\Structure\LevelMap2.cs" />

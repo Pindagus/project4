@@ -33,8 +33,8 @@ namespace project4
 
             graphics.IsFullScreen = true;
 
-            //creates level
-            new FirstLevel(this);
+            //creates level, the integer determines which level will be loaded
+            new Level(this, 3);
 
             base.Initialize();
         }
@@ -48,12 +48,16 @@ namespace project4
        
         protected override void UnloadContent()
         {
+
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            //TODO check if level is completed and set next level
+
 
             base.Update(gameTime);
         }
