@@ -33,9 +33,8 @@ namespace project4
 
             graphics.IsFullScreen = true;
 
-            //creates new map, to create new map with new structure you have to make new class in Map/Structure directory
-            //check code of the two example maps
-            new LevelMap3(this);
+            //creates level
+            new FirstLevel(this);
 
             base.Initialize();
         }

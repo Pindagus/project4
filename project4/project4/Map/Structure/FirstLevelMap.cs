@@ -6,9 +6,9 @@ using System.Text;
 
 namespace project4
 {
-    class LevelMap1 : TileMap
+    class FirstLevelMap: TileMap
     {
-        public LevelMap1(Game game)
+        public FirstLevelMap(Game game)
             : base(game)
         {
             //this will set the default tile, check variable defaultTile in the TileMap class to check which Tiles are available
