@@ -40,9 +40,9 @@
     <Compile Include="Level\FirstLevel.cs" />
     <Compile Include="Level\LastLevel.cs" />
     <Compile Include="Map\BaseTile.cs" />
-    <Compile Include="Map\Structure\Map1.cs" />
-    <Compile Include="Map\Structure\LastLevelMap.cs" />
-    <Compile Include="Map\Structure\FirstLevelMap.cs" />
+    <Compile Include="Map\Structure\LevelMap3.cs" />
+    <Compile Include="Map\Structure\LevelMap2.cs" />
+    <Compile Include="Map\Structure\LevelMap1.cs" />
     <Compile Include="Map\TileMap.cs" />
     <Compile Include="Map\Tiles\Brown.cs" />
     <Compile Include="Map\Tiles\Concrete.cs" />
