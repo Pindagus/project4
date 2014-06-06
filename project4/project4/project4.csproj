@@ -39,7 +39,7 @@
     <Compile Include="Map\BaseTile.cs" />
     <Compile Include="Map\Structure\Map1.cs" />
     <Compile Include="Map\Structure\Map2.cs" />
-    <Compile Include="Map\Structure\map3.cs" />
+    <Compile Include="Map\Structure\LevelMap1.cs" />
     <Compile Include="Map\TileMap.cs" />
     <Compile Include="Map\Tiles\Brown.cs" />
     <Compile Include="Map\Tiles\Concrete.cs" />
