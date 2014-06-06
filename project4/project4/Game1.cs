@@ -34,7 +34,7 @@ namespace project4
             graphics.IsFullScreen = true;
 
             //creates level
-            new LevelMap1(this);
+            new FirstLevel(this);
 
             base.Initialize();
         }
