@@ -27,6 +27,9 @@ namespace project4
                 case 1:
                     _levelMap = new FirstLevelMap(game);
                     break;
+
+                    //TDO create object of level here
+
                 case 2:
                     _levelMap = new LevelMap2(game);
                     break;
