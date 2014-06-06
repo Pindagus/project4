@@ -35,7 +35,7 @@ namespace project4
 
             //creates new map, to create new map with new structure you have to make new class in Map/Structure directory
             //check code of the two example maps
-            new LevelMap1(this);
+            new LevelMap2(this);
 
             base.Initialize();
         }
