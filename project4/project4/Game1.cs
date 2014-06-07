@@ -19,7 +19,12 @@ namespace project4
         GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
         private Level _currentLevel;
-        private Player _player;
+        public Player _player;
+
+        public static MouseState _previousMouseState;
+        public static MouseState _currentMouseState;
+        public static Vector2 mousePos;
+        private TitleScreen _titleScreen;
 
         public Game1()
             : base()
@@ -34,15 +39,13 @@ namespace project4
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
 
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             //
-
 
             _player = new Player(this);
 
-
-            //creates level, the integer determines which level will be loaded
-            _currentLevel = new Level(this, 1);
+            //set titleScreen
+            _titleScreen = new TitleScreen(this);
 
             base.Initialize();
         }
@@ -62,9 +65,31 @@ namespace project4
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            //TODO check if level is completed and set next level
-            // new level(this,2)
+            //udpates mouse position
+            _previousMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
 
+            mousePos = new Vector2(_currentMouseState.X, _currentMouseState.Y);
+            _player.mousePos = mousePos;
+
+            //check if button is clicked on start screen
+            if (_titleScreen.StartButton.IsClicked){
+                //creates level, the integer determines which level will be loaded
+                _currentLevel = new Level(this, 1);
+
+                //removes start screen
+                this.Components.Remove(_titleScreen.StartButton);
+                this.Components.Remove(_titleScreen.ExitButton);
+                this.Components.Remove(_titleScreen.Background);
+            }
+
+            //exit button
+            if (_titleScreen.ExitButton.IsClicked){
+                Exit();
+            }
+
+            //TODO check if level is completed and set next level, probably with boolean
+            // new level(this,2)
 
             base.Update(gameTime);
         }

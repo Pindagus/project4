@@ -8,7 +8,7 @@ using System.Text;
 
 namespace project4
 {
-    class Player : DrawableGameComponent
+    public class Player : DrawableGameComponent
     {
         private Texture2D _mouseCursorTexture;
         public Vector2 mousePos;
@@ -29,9 +29,7 @@ namespace project4
 
         public override void Update(GameTime gameTime)
         {
-            //udpates mouse position
-            MouseState mousestate = Mouse.GetState();
-            mousePos = new Vector2(mousestate.X, mousestate.Y);
+            
 
             base.Update(gameTime);
         }
