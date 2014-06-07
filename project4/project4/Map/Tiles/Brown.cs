@@ -8,6 +8,11 @@ namespace project4
     class Brown : BaseTile
     {
 
+        public Brown()
+        {
+            accessible = false;
+        }
+
         public override int getTileInt
         {
             get {

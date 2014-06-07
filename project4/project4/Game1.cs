@@ -18,6 +18,8 @@ namespace project4
     {
         GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
+        private Level _currentLevel;
+        private Player _player;
 
         public Game1()
             : base()
@@ -28,13 +30,19 @@ namespace project4
 
         protected override void Initialize()
         {
+            //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
 
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
+            //
+
+
+            _player = new Player(this);
+
 
             //creates level, the integer determines which level will be loaded
-            new Level(this, 3);
+            _currentLevel = new Level(this, 1);
 
             base.Initialize();
         }
@@ -55,6 +63,7 @@ namespace project4
                 Exit();
 
             //TODO check if level is completed and set next level
+            // new level(this,2)
 
 
             base.Update(gameTime);
@@ -64,7 +73,7 @@ namespace project4
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
             base.Draw(gameTime);
             spriteBatch.End();
         }

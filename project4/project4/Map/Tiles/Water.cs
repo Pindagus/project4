@@ -7,6 +7,12 @@ namespace project4
 {
     class Water : BaseTile
     {
+
+        public Water()
+        {
+            accessible = false;
+        }
+
         override public int getTileInt
         {
             get
