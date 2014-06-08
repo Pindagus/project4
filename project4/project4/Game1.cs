@@ -11,20 +11,23 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace project4
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
-        private Level _currentLevel;
+        public Level _currentLevel;
         public Player _player;
+        private Cheese _cheese;
 
         public static MouseState _previousMouseState;
         public static MouseState _currentMouseState;
         public static Vector2 mousePos;
+        public static KeyboardState _previousKeyboardState;
+        public static KeyboardState _currentKeyboardState;
+
         private TitleScreen _titleScreen;
+
+        private bool DEBUG  = true;
 
         public Game1()
             : base()
@@ -38,14 +41,22 @@ namespace project4
             //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             //
 
-            _player = new Player(this);
+            _player = new Player(this, _cheese);
 
-            //set titleScreen
-            _titleScreen = new TitleScreen(this);
+            //this will set the level immidiately instead of titlescreen, for debug purpose only
+            if (DEBUG) { 
+                _cheese = new Cheese(this, 7, 4);
+
+                //creates level, the integer determines which level will be loaded
+                _currentLevel = new Level(this, _player, _cheese, 1);
+            }else{
+                //set titleScreen
+                _titleScreen = new TitleScreen(this);
+            }
+            
 
             base.Initialize();
         }
@@ -57,7 +68,6 @@ namespace project4
        
         protected override void UnloadContent()
         {
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -65,31 +75,37 @@ namespace project4
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            //udpates mouse position
             _previousMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();
 
+            _previousKeyboardState = _currentKeyboardState;
+            _currentKeyboardState = Keyboard.GetState();
+
+            //udpates mouse position, will be used for click handling
             mousePos = new Vector2(_currentMouseState.X, _currentMouseState.Y);
             _player.mousePos = mousePos;
 
-            //check if button is clicked on start screen
-            if (_titleScreen.StartButton.IsClicked){
-                //creates level, the integer determines which level will be loaded
-                _currentLevel = new Level(this, 1);
+            if(!DEBUG){
+                //check if button is clicked on start screen
+                if (_titleScreen.StartButton.IsClicked){
+                    _cheese = new Cheese(this, 7, 4);
 
-                //removes start screen
-                this.Components.Remove(_titleScreen.StartButton);
-                this.Components.Remove(_titleScreen.ExitButton);
-                this.Components.Remove(_titleScreen.Background);
-            }
+                    //creates level, the integer determines which level will be loaded
+                    _currentLevel = new Level(this, _player, _cheese, 3);
 
-            //exit button
-            if (_titleScreen.ExitButton.IsClicked){
-                Exit();
+                    //removes start screen's componentes
+                    this.Components.Remove(_titleScreen.StartButton);
+                    this.Components.Remove(_titleScreen.ExitButton);
+                    this.Components.Remove(_titleScreen.Background);
+                }
+
+                //exit button
+                if (_titleScreen.ExitButton.IsClicked){
+                    Exit();
+                }
             }
 
             //TODO check if level is completed and set next level, probably with boolean
-            // new level(this,2)
 
             base.Update(gameTime);
         }
@@ -100,7 +116,8 @@ namespace project4
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
             base.Draw(gameTime);
-            spriteBatch.End();
+            spriteBatch.End(); 
         }
+
     }
 }

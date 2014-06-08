@@ -12,11 +12,14 @@ namespace project4
     {
         private Texture2D _mouseCursorTexture;
         public Vector2 mousePos;
+        private Cheese _cheese;
 
-        public Player(Game game)
+        public Player(Game game, Cheese cheese)
             : base (game)
         {
             game.Components.Add(this);
+
+            _cheese = cheese;
         }
 
         protected override void LoadContent()
@@ -30,13 +33,12 @@ namespace project4
         public override void Update(GameTime gameTime)
         {
             
-
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            //draws mouse with current mouse position
+            //draws mouse cursor texture on screen with current mouse position
             Game1.spriteBatch.Draw(
                 _mouseCursorTexture,
                 mousePos,
