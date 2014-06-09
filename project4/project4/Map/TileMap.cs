@@ -31,7 +31,18 @@ namespace project4
         protected int baseOffsetY = 0;
 
         //default tile
-        protected BaseTile defaultTile;
+         protected defaultTiles defaultTile;
+ 
+         public enum defaultTiles
+         {
+             Brown,
+             Concrete,
+             Dirt,
+             Grass,
+             Water,
+             Wood,
+             Stone
+         }
 
         //constructor
         public TileMap(Game game)
@@ -50,7 +61,35 @@ namespace project4
                 {
 
                     //firstly this wil create a map which will contain only the default tiles
-                    BaseTile currentTile = defaultTile;
+                    BaseTile currentTile;
+
+                    switch (defaultTile)
+                    {
+                         case defaultTiles.Brown:
+                             currentTile = new Brown();
+                             break;
+                         case defaultTiles.Concrete:
+                             currentTile = new Concrete();
+                             break;
+                         case defaultTiles.Dirt:
+                             currentTile = new Dirt();
+                             break;
+                         case defaultTiles.Grass:
+                             currentTile = new Grass();
+                             break;
+                         case defaultTiles.Water:
+                             currentTile = new Water();
+                             break;
+                         case defaultTiles.Wood:
+                             currentTile = new Wood();
+                             break;
+                         case defaultTiles.Stone:
+                             currentTile = new Stone();
+                             break;
+                         default:
+                             currentTile = new Water();
+                             break;
+                     }
 
                     thisRow.Columns.Add(currentTile);
                 }

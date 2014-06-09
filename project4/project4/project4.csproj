@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Cheese.cs" />
     <Compile Include="Computer.cs" />
+    <Compile Include="Diamond.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interactor.cs" />
@@ -81,6 +82,9 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\img\GameObjects\diamond.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\img\pointer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -96,7 +100,7 @@
     <Content Include="Content\img\GameObjects\Cheese\right_view.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\img\GameObjects\computer1.png">
+    <Content Include="Content\img\GameObjects\computer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\img\mouse.png">

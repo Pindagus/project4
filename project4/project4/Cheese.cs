@@ -22,6 +22,20 @@ namespace project4
         public Texture2D _leftTexture;
         public Texture2D _rightTexture;
         private float _scale;
+        private Texture2D debug;
+
+        public Rectangle boundingBox
+        {
+            get
+            {
+                return new Rectangle(
+                        (int)ComputePos.X,
+                        (int)ComputePos.Y,
+                        (int)BaseTile.TileWidth,
+                        (int)BaseTile.TileHeight
+                    );
+            }
+        }
 
         //get origin
         public Vector2 Origin
@@ -44,7 +58,7 @@ namespace project4
             }
         }
 
-
+        //constructor
         public Cheese(Game game, int TileX, int TileY)
             : base (game)
         {
@@ -64,6 +78,10 @@ namespace project4
 
         protected override void LoadContent()
         {
+            //debug boundingbox
+            debug = new Texture2D(GraphicsDevice, 1, 1);
+            debug.SetData(new Color[] { Color.White });
+
             _frontTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\front_view");
             _backTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\back_view");
             _leftTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\left_view");
@@ -73,6 +91,13 @@ namespace project4
         }
 
         public override void Draw(GameTime gameTime){
+
+            Game1.spriteBatch.Draw(
+                debug,
+                boundingBox,
+                Color.White
+                );
+
             Game1.spriteBatch.Draw(
                     _texture,
                     ComputePos,

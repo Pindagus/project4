@@ -14,11 +14,15 @@ namespace project4
         private Player _player;
         private Cheese _cheese;
         private Computer _computer1;
+        public bool diamondIsTaken;
+        private Diamond _diamond;
 
         public Level(Game game, Player player, Cheese cheese, int currentLevel)
             : base(game)
         {
             game.Components.Add(this);
+
+            diamondIsTaken = false;
 
             _player = player;
             _cheese = cheese;
@@ -36,16 +40,17 @@ namespace project4
                     levelMap = new FirstLevelMap(game);
 
                     //TODO add all objects to list with type GameObject
-                    _computer1 = new Computer(game, 4,4);
+                    _computer1 = new Computer(game, 3,4);
+                    _diamond = new Diamond(game, 2, 2);
 
                     setAccessibility();
 
                     break;
                 case 2:
-                    levelMap = new LevelMap2(game);
+                    //levelMap = new LevelMap2(game);
                     break;
                 case 3:
-                    levelMap = new LastLevelMap(game);
+                    //levelMap = new LastLevelMap(game);
                     break;
             }
         }
@@ -75,6 +80,13 @@ namespace project4
 
             if (_computer1.IsClicked && ComputerSelectionRange()){
                 //TODO handle computer actions after clicking
+
+                Console.WriteLine("PC was clicked");
+            }
+
+            //check if player has grabbed diamond
+            if(_cheese.boundingBox.Intersects(_diamond.boundingBox)){
+                Console.WriteLine("Diamond grabbed");
             }
 
 

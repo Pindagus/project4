@@ -19,30 +19,23 @@ namespace project4
         public float layerDepth;
         public float scale;
 
-        public Rectangle boundingBox
+        //some classes will override this method to suit there needs
+        public virtual Rectangle boundingBox
         {
             get
             {
                 return new Rectangle(
                         (int)ComputePos.X,
-                        (int)ComputePos.Y - texture.Height + BaseTile.TileHeight,
-                        (int)texture.Width,
-                        (int)texture.Height
+                        (int)ComputePos.Y,
+                        (int)BaseTile.TileWidth,
+                        (int)BaseTile.TileHeight
                     );
             }
         }
 
         //get origin
-        public Vector2 Origin
-        {
-            get
-            {
-                return new Vector2(
-                    widthOffset,
-                    texture.Height - BaseTile.TileHeight + heightOffset
-                    );
-            }
-        }
+        public Vector2 Origin;
+        
 
         //computes vector2 position of tile X and Y in pixels
         public Vector2 ComputePos
@@ -68,7 +61,7 @@ namespace project4
                     null,
                     Color.White,
                     0,
-                    Origin, //TODO origin zero for now, change this later on
+                    Origin,
                     scale,
                     SpriteEffects.None,
                     layerDepth

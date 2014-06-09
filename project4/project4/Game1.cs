@@ -106,6 +106,11 @@ namespace project4
             }
 
             //TODO check if level is completed and set next level, probably with boolean
+            if (_currentLevel.diamondIsTaken)
+            {
+                _currentLevel = new Level(this, _player, _cheese, 2);
+            }
+
 
             base.Update(gameTime);
         }
