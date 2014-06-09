@@ -59,6 +59,15 @@ namespace project4
         public void checkAccessibilityVertical(Keys key, ref int tile, int direction){
             if (Game1._currentKeyboardState.IsKeyDown(key)){
                 if (!Game1._previousKeyboardState.IsKeyDown(key)){
+
+                    if (key == Keys.Up){
+                        _cheese._texture = _cheese._backTexture;
+                    }
+
+                    if (key == Keys.Down){
+                        _cheese._texture = _cheese._frontTexture;
+                    }
+
                     if (levelMap.Rows[_cheese._TileY + direction].Columns[_cheese._TileX].accessible){
                         //tile += direction;
                         _cheese.Move(0, direction);
@@ -70,6 +79,14 @@ namespace project4
         public void checkAccessibilityHorizontal(Keys key, ref int tile, int direction){
             if (Game1._currentKeyboardState.IsKeyDown(key)){
                 if (!Game1._previousKeyboardState.IsKeyDown(key)){
+                    if (key == Keys.Left){
+                        _cheese._texture = _cheese._leftTexture;
+                    }
+
+                    if(key == Keys.Right){
+                        _cheese._texture = _cheese._rightTexture;
+                    }
+
                     if (levelMap.Rows[_cheese._TileY].Columns[_cheese._TileX + direction].accessible){
                         _cheese.Move(direction, 0);
                     }

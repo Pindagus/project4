@@ -10,13 +10,17 @@ namespace project4
 {
     public class Cheese : DrawableGameComponent
     {
-        private Texture2D _texture;
+        public Texture2D _texture;
         public int _TileX;
         public int _TileY;
         private float _layerDepth;
         private Vector2 _origin;
-
         private int widthOffset = 18;
+
+        public Texture2D _frontTexture;
+        public Texture2D _backTexture;
+        public Texture2D _leftTexture;
+        public Texture2D _rightTexture;
 
         //get origin
         public Vector2 Origin
@@ -51,23 +55,19 @@ namespace project4
 
             base.Initialize();
 
-            //set origin after base initialize so the texture is available in the constructor
+            //after base initialize so the texture is available in the constructor
+            _texture = _frontTexture;
             _origin = Origin;
-
         }
 
         protected override void LoadContent()
         {
-            _texture = Game.Content.Load<Texture2D>(@"img\GameObjects\front_only");
+            _frontTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\front_view");
+            _backTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\back_view");
+            _leftTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\left_view");
+            _rightTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\right_view");
 
             base.LoadContent();
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            //TODO set texture due to enum state, left up down right
-
-            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime){

@@ -12,7 +12,7 @@ namespace project4
     {
         private Texture2D _mouseCursorTexture;
         public Vector2 mousePos;
-        private Cheese _cheese;
+        private Cheese _cheese;     
 
         public Player(Game game, Cheese cheese)
             : base (game)

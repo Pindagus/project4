@@ -91,7 +91,7 @@ namespace project4
                     _cheese = new Cheese(this, 7, 4);
 
                     //creates level, the integer determines which level will be loaded
-                    _currentLevel = new Level(this, _player, _cheese, 3);
+                    _currentLevel = new Level(this, _player, _cheese, 1);
 
                     //removes start screen's componentes
                     this.Components.Remove(_titleScreen.StartButton);
