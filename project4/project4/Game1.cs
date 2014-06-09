@@ -48,7 +48,7 @@ namespace project4
 
             //this will set the level immidiately instead of titlescreen, for debug purpose only
             if (DEBUG) { 
-                _cheese = new Cheese(this, 7, 4);
+                _cheese = new Cheese(this, 7, 3);
 
                 //creates level, the integer determines which level will be loaded
                 _currentLevel = new Level(this, _player, _cheese, 1);

@@ -8,79 +8,43 @@ using System.Text;
 
 namespace project4
 {
-    public class Cheese : DrawableGameComponent
+    public class Cheese : Interactor
     {
-        public Texture2D _texture;
-        public int _TileX;
-        public int _TileY;
-        private float _layerDepth;
-        private Vector2 _origin;
-        private int widthOffset = 7;
-
         public Texture2D _frontTexture;
         public Texture2D _backTexture;
         public Texture2D _leftTexture;
         public Texture2D _rightTexture;
-        private float _scale;
-        private Texture2D debug;
-
-        public Rectangle boundingBox
-        {
-            get
-            {
-                return new Rectangle(
-                        (int)ComputePos.X,
-                        (int)ComputePos.Y,
-                        (int)BaseTile.TileWidth,
-                        (int)BaseTile.TileHeight
-                    );
-            }
-        }
-
-        //get origin
-        public Vector2 Origin
-        {
-            get
-            {
-                return new Vector2(
-                    widthOffset,
-                    _texture.Height - BaseTile.TileHeight
-                    );
-            }
-        }
-
-        //computes vector2 position of tile X and Y in pixels
-        public Vector2 ComputePos
-        {
-            get
-            {
-                return new Vector2(_TileX * BaseTile.TileWidth, _TileY * BaseTile.TileHeight);
-            }
-        }
+        
+        //private Texture2D debug;
 
         //constructor
-        public Cheese(Game game, int TileX, int TileY)
+        public Cheese(Game game, int X, int Y)
             : base (game)
         {
-            game.Components.Add(this);
 
-            _TileX = TileX;
-            _TileY = TileY;
-            _layerDepth = 0.4f;
-            _scale = 0.8f;
+            TileX = X;
+            TileY = Y;
+
+            layerDepth = ComputeDepth;
+            scale = 0.8f;
+
+            widthOffset = 7;
 
             base.Initialize();
 
             //after base initialize so the texture is available in the constructor
-            _texture = _frontTexture;
-            _origin = Origin;
+            texture = _frontTexture;
+            Origin = new Vector2(
+                    widthOffset,
+                    texture.Height - BaseTile.TileHeight
+                    );
         }
 
         protected override void LoadContent()
         {
             //debug boundingbox
-            debug = new Texture2D(GraphicsDevice, 1, 1);
-            debug.SetData(new Color[] { Color.White });
+            //debug = new Texture2D(GraphicsDevice, 1, 1);
+            //debug.SetData(new Color[] { Color.White });
 
             _frontTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\front_view");
             _backTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\back_view");
@@ -91,32 +55,45 @@ namespace project4
         }
 
         public override void Draw(GameTime gameTime){
-
-            Game1.spriteBatch.Draw(
-                debug,
-                boundingBox,
-                Color.White
-                );
-
-            Game1.spriteBatch.Draw(
-                    _texture,
-                    ComputePos,
-                    null,
-                    Color.White,
-                    0,
-                    _origin,
-                    _scale,
-                    SpriteEffects.None,
-                    _layerDepth
-                );
+            
+            //draw debug boundingbox
+            //Game1.spriteBatch.Draw(
+            //    debug,
+            //    hoverBox,
+            //    Color.White
+            //    );
 
             base.Draw(gameTime);
         }
 
         public void Move(int X, int Y){
-            _TileX += X;
-            _TileY += Y;
-        }        
+            TileX += X;
+            TileY += Y;
+
+            //calculate depth of cheese, so that cheese wil be obscurred by computer for example
+            layerDepth = ComputeDepth;
+        }
+
+        public Rectangle hoverBox
+        {
+            get
+            {
+                return new Rectangle(
+                        (int)ComputePos.X,
+                        (int)ComputePos.Y + BaseTile.TileHeight - texture.Height + 20,
+                        (int)BaseTile.TileWidth,
+                        (int)texture.Height - 60
+                    );
+            }    
+        }
+
+        public override bool IsHovering
+        {
+            get
+            {
+                return (hoverBox.Contains(Game1.mousePos.X, Game1.mousePos.Y));
+            }
+        }
 
     }
 }

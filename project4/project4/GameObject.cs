@@ -7,7 +7,7 @@ using System.Text;
 
 namespace project4
 {
-    class GameObject : DrawableGameComponent
+    public class GameObject : DrawableGameComponent
     {
         public Texture2D texture;
         public int TileX;
@@ -16,7 +16,7 @@ namespace project4
         public int widthOffset;
         public int heightOffset;
 
-        public float layerDepth;
+        public double layerDepth;
         public float scale;
 
         //some classes will override this method to suit there needs
@@ -35,7 +35,6 @@ namespace project4
 
         //get origin
         public Vector2 Origin;
-        
 
         //computes vector2 position of tile X and Y in pixels
         public Vector2 ComputePos
@@ -43,6 +42,16 @@ namespace project4
             get
             {
                 return new Vector2(TileX * BaseTile.TileWidth, TileY * BaseTile.TileHeight);
+            }
+        }
+
+        //computes depth of object
+        public double ComputeDepth
+        {
+            get
+            {
+                //TODO compute depth
+                return (double)TileY/500 + 0.100;
             }
         }
 
@@ -64,7 +73,7 @@ namespace project4
                     Origin,
                     scale,
                     SpriteEffects.None,
-                    layerDepth
+                    (float)layerDepth
                 );
 
             base.Draw(gameTime);

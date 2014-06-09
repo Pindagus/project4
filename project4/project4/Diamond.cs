@@ -9,15 +9,15 @@ namespace project4
 {
     class Diamond : GameObject
     {
-        private Texture2D debug;
+        //private Texture2D debug;
 
         public Diamond(Game game, int X, int Y)
             : base(game)
         {
-            layerDepth = 0.3f;
-
             TileX = X;
             TileY = Y;
+
+            layerDepth = ComputeDepth -0.01;
 
             scale = 1;
 
@@ -27,28 +27,28 @@ namespace project4
                     widthOffset,
                     texture.Height - BaseTile.TileHeight
                     );
-
         }
 
         protected override void LoadContent()
         {
             //debug boundingbox
-            debug = new Texture2D(GraphicsDevice, 1, 1);
-            debug.SetData(new Color[] { Color.White });
+            //debug = new Texture2D(GraphicsDevice, 1, 1);
+            //debug.SetData(new Color[] { Color.White });
 
             texture = Game.Content.Load<Texture2D>(@"img\GameObjects\diamond");
 
             base.LoadContent();
         }
 
-        //delete after debuggnig
+        //delete after debugging
         public override void Draw(GameTime gameTime)
         {
-            Game1.spriteBatch.Draw(
-                debug,
-                boundingBox,
-                Color.Green
-                );
+            //debug draw boundingbox
+            //Game1.spriteBatch.Draw(
+            //    debug,
+            //    boundingBox,
+            //    Color.Green
+            //    );
 
             base.Draw(gameTime);
         }

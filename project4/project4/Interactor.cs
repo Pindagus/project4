@@ -7,10 +7,10 @@ using System.Text;
 
 namespace project4
 {
-    class Interactor : GameObject
+    public class Interactor : GameObject
     {
 
-        public bool IsHovering
+        public virtual bool IsHovering
         {
             get
             {

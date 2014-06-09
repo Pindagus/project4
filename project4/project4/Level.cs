@@ -64,19 +64,19 @@ namespace project4
         public override void Update(GameTime gameTime)
         {
             //levels checks if next tile is accessible for cheese
-            checkAccessibilityVertical(Keys.Up, ref _cheese._TileY, -1);
-            checkAccessibilityVertical(Keys.Down, ref _cheese._TileY, +1);
-            checkAccessibilityHorizontal(Keys.Left, ref _cheese._TileX, -1);
-            checkAccessibilityHorizontal(Keys.Right, ref _cheese._TileX, +1);
+            checkAccessibilityVertical(Keys.Up, ref _cheese.TileY, -1);
+            checkAccessibilityVertical(Keys.Down, ref _cheese.TileY, +1);
+            checkAccessibilityHorizontal(Keys.Left, ref _cheese.TileX, -1);
+            checkAccessibilityHorizontal(Keys.Right, ref _cheese.TileX, +1);
 
-            //set mouse pointer selector when hovering over computer1
-            if (_computer1.IsHovering){
+            //set mouse pointer selector when hovering over computer1 and cheese
+            if (_computer1.IsHovering || _cheese.IsHovering){
                 _player._mousePointerXOffset = 100;
                 _player._currentMouseTexture = _player._mousePointerTexture;
             }else{
                 _player._mousePointerXOffset = 0;
                 _player._currentMouseTexture = _player._mouseCursorTexture;
-            }
+            }            
 
             if (_computer1.IsClicked && ComputerSelectionRange()){
                 //TODO handle computer actions after clicking
@@ -84,7 +84,13 @@ namespace project4
                 Console.WriteLine("PC was clicked");
             }
 
+            if (_cheese.IsClicked){
+                //TODO handle cheese actions after clicking
+                Console.WriteLine("Cheese was clicked");
+            }
+
             //check if player has grabbed diamond
+            //TODO player can only grab the diamond if computer assignment has been done
             if(_cheese.boundingBox.Intersects(_diamond.boundingBox)){
                 Console.WriteLine("Diamond grabbed");
             }
@@ -98,18 +104,18 @@ namespace project4
             
             if(
                 //row 1
-                _computer1.TileX -1 == _cheese._TileX && _computer1.TileY -1 == _cheese._TileY ||
-                _computer1.TileX == _cheese._TileX && _computer1.TileY - 1 == _cheese._TileY ||
-                _computer1.TileX + 1 == _cheese._TileX && _computer1.TileY - 1 == _cheese._TileY ||
+                _computer1.TileX -1 == _cheese.TileX && _computer1.TileY -1 == _cheese.TileY ||
+                _computer1.TileX == _cheese.TileX && _computer1.TileY - 1 == _cheese.TileY ||
+                _computer1.TileX + 1 == _cheese.TileX && _computer1.TileY - 1 == _cheese.TileY ||
 
                 //row2
-                _computer1.TileX - 1 == _cheese._TileX && _computer1.TileY == _cheese._TileY ||
-                _computer1.TileX + 1 == _cheese._TileX && _computer1.TileY == _cheese._TileY ||
+                _computer1.TileX - 1 == _cheese.TileX && _computer1.TileY == _cheese.TileY ||
+                _computer1.TileX + 1 == _cheese.TileX && _computer1.TileY == _cheese.TileY ||
 
                 //row3
-                _computer1.TileX - 1 == _cheese._TileX && _computer1.TileY + 1 == _cheese._TileY ||
-                _computer1.TileX == _cheese._TileX && _computer1.TileY + 1 == _cheese._TileY ||
-                _computer1.TileX + 1 == _cheese._TileX && _computer1.TileY + 1 == _cheese._TileY
+                _computer1.TileX - 1 == _cheese.TileX && _computer1.TileY + 1 == _cheese.TileY ||
+                _computer1.TileX == _cheese.TileX && _computer1.TileY + 1 == _cheese.TileY ||
+                _computer1.TileX + 1 == _cheese.TileX && _computer1.TileY + 1 == _cheese.TileY
                 )
             {
                 return true;
@@ -123,14 +129,14 @@ namespace project4
                 if (!Game1._previousKeyboardState.IsKeyDown(key)){
 
                     if (key == Keys.Up){
-                        _cheese._texture = _cheese._backTexture;
+                        _cheese.texture= _cheese._backTexture;
                     }
 
                     if (key == Keys.Down){
-                        _cheese._texture = _cheese._frontTexture;
+                        _cheese.texture = _cheese._frontTexture;
                     }
 
-                    if (levelMap.Rows[_cheese._TileY + direction].Columns[_cheese._TileX].accessible){
+                    if (levelMap.Rows[_cheese.TileY + direction].Columns[_cheese.TileX].accessible){
                         //tile += direction;
                         _cheese.Move(0, direction);
                     }
@@ -140,16 +146,17 @@ namespace project4
 
         public void checkAccessibilityHorizontal(Keys key, ref int tile, int direction){
             if (Game1._currentKeyboardState.IsKeyDown(key)){
+
                 if (!Game1._previousKeyboardState.IsKeyDown(key)){
                     if (key == Keys.Left){
-                        _cheese._texture = _cheese._leftTexture;
+                        _cheese.texture = _cheese._leftTexture;
                     }
 
                     if(key == Keys.Right){
-                        _cheese._texture = _cheese._rightTexture;
+                        _cheese.texture = _cheese._rightTexture;
                     }
 
-                    if (levelMap.Rows[_cheese._TileY].Columns[_cheese._TileX + direction].accessible){
+                    if (levelMap.Rows[_cheese.TileY].Columns[_cheese.TileX + direction].accessible){
                         _cheese.Move(direction, 0);
                     }
                 }

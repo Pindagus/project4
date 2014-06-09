@@ -30,10 +30,13 @@ namespace project4
             scale = 1.2f;
             widthOffset = 28;
             heightOffset = 18;
-            layerDepth = 0.3f;
 
             TileX = X;
             TileY = Y;
+
+            layerDepth = ComputeDepth;
+
+            Console.WriteLine(layerDepth);
 
             base.Initialize();
 

@@ -67,7 +67,7 @@ namespace project4
                 _origin,
                 0.3f,
                 SpriteEffects.None,
-                0.5f
+                1f
                 );
 
             base.Draw(gameTime);
