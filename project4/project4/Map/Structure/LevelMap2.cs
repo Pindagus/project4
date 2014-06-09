@@ -12,7 +12,7 @@ namespace project4
             : base(game)
         {
             //this will set the default tile, check variable defaultTile in the TileMap class to check which Tiles are available
-            defaultTile = new Grass();
+            defaultTile = defaultTiles.Grass;
 
             createDefaultMap();
             createMapStructure();

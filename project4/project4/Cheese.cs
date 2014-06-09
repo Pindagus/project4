@@ -10,13 +10,32 @@ namespace project4
 {
     public class Cheese : DrawableGameComponent
     {
-        private Texture2D _texture;
+        public Texture2D _texture;
         public int _TileX;
         public int _TileY;
         private float _layerDepth;
         private Vector2 _origin;
+        private int widthOffset = 7;
 
-        private int widthOffset = 18;
+        public Texture2D _frontTexture;
+        public Texture2D _backTexture;
+        public Texture2D _leftTexture;
+        public Texture2D _rightTexture;
+        private float _scale;
+        private Texture2D debug;
+
+        public Rectangle boundingBox
+        {
+            get
+            {
+                return new Rectangle(
+                        (int)ComputePos.X,
+                        (int)ComputePos.Y,
+                        (int)BaseTile.TileWidth,
+                        (int)BaseTile.TileHeight
+                    );
+            }
+        }
 
         //get origin
         public Vector2 Origin
@@ -39,7 +58,7 @@ namespace project4
             }
         }
 
-
+        //constructor
         public Cheese(Game game, int TileX, int TileY)
             : base (game)
         {
@@ -48,29 +67,37 @@ namespace project4
             _TileX = TileX;
             _TileY = TileY;
             _layerDepth = 0.4f;
+            _scale = 0.8f;
 
             base.Initialize();
 
-            //set origin after base initialize so the texture is available in the constructor
+            //after base initialize so the texture is available in the constructor
+            _texture = _frontTexture;
             _origin = Origin;
-
         }
 
         protected override void LoadContent()
         {
-            _texture = Game.Content.Load<Texture2D>(@"img\GameObjects\front_only");
+            //debug boundingbox
+            debug = new Texture2D(GraphicsDevice, 1, 1);
+            debug.SetData(new Color[] { Color.White });
+
+            _frontTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\front_view");
+            _backTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\back_view");
+            _leftTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\left_view");
+            _rightTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\right_view");
 
             base.LoadContent();
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            //TODO set texture due to enum state, left up down right
-
-            base.Update(gameTime);
-        }
-
         public override void Draw(GameTime gameTime){
+
+            Game1.spriteBatch.Draw(
+                debug,
+                boundingBox,
+                Color.White
+                );
+
             Game1.spriteBatch.Draw(
                     _texture,
                     ComputePos,
@@ -78,7 +105,7 @@ namespace project4
                     Color.White,
                     0,
                     _origin,
-                    1,
+                    _scale,
                     SpriteEffects.None,
                     _layerDepth
                 );
