@@ -13,6 +13,7 @@ namespace project4
         private TileMap levelMap;
         private Player _player;
         private Cheese _cheese;
+        private Computer _computer1;
 
         public Level(Game game, Player player, Cheese cheese, int currentLevel)
             : base(game)
@@ -31,9 +32,14 @@ namespace project4
             switch (_currentLevel)
             {
                 case 1:
+                    //TODO create objects of level here
                     levelMap = new FirstLevelMap(game);
 
-                    //TODO create objects of level here
+                    //TODO add all objects to list with type GameObject
+                    _computer1 = new Computer(game, 4,4);
+
+                    setAccessibility();
+
                     break;
                 case 2:
                     levelMap = new LevelMap2(game);
@@ -44,16 +50,60 @@ namespace project4
             }
         }
 
+        private void setAccessibility(){
+            //for now only computer!
+            //TODO foreach level's objects list, and set the accessibility false where objects are standing
+            levelMap.Rows[_computer1.TileY].Columns[_computer1.TileX].accessible = false;
+        }
+
         public override void Update(GameTime gameTime)
         {
             //levels checks if next tile is accessible for cheese
             checkAccessibilityVertical(Keys.Up, ref _cheese._TileY, -1);
             checkAccessibilityVertical(Keys.Down, ref _cheese._TileY, +1);
             checkAccessibilityHorizontal(Keys.Left, ref _cheese._TileX, -1);
-            checkAccessibilityHorizontal(Keys.Right, ref _cheese._TileX, +1);   
+            checkAccessibilityHorizontal(Keys.Right, ref _cheese._TileX, +1);
+
+            //set mouse pointer selector when hovering over computer1
+            if (_computer1.IsHovering){
+                _player._mousePointerXOffset = 100;
+                _player._currentMouseTexture = _player._mousePointerTexture;
+            }else{
+                _player._mousePointerXOffset = 0;
+                _player._currentMouseTexture = _player._mouseCursorTexture;
+            }
+
+            if (_computer1.IsClicked && ComputerSelectionRange()){
+                //TODO handle computer actions after clicking
+            }
 
 
             base.Update(gameTime);
+        }
+
+        //returns true if player stands on tiles next to computer
+        private bool ComputerSelectionRange(){
+            
+            if(
+                //row 1
+                _computer1.TileX -1 == _cheese._TileX && _computer1.TileY -1 == _cheese._TileY ||
+                _computer1.TileX == _cheese._TileX && _computer1.TileY - 1 == _cheese._TileY ||
+                _computer1.TileX + 1 == _cheese._TileX && _computer1.TileY - 1 == _cheese._TileY ||
+
+                //row2
+                _computer1.TileX - 1 == _cheese._TileX && _computer1.TileY == _cheese._TileY ||
+                _computer1.TileX + 1 == _cheese._TileX && _computer1.TileY == _cheese._TileY ||
+
+                //row3
+                _computer1.TileX - 1 == _cheese._TileX && _computer1.TileY + 1 == _cheese._TileY ||
+                _computer1.TileX == _cheese._TileX && _computer1.TileY + 1 == _cheese._TileY ||
+                _computer1.TileX + 1 == _cheese._TileX && _computer1.TileY + 1 == _cheese._TileY
+                )
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void checkAccessibilityVertical(Keys key, ref int tile, int direction){

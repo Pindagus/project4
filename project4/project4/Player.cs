@@ -10,9 +10,21 @@ namespace project4
 {
     public class Player : DrawableGameComponent
     {
-        private Texture2D _mouseCursorTexture;
+        public Texture2D _mouseCursorTexture;
+        public Texture2D _mousePointerTexture;
+        public Texture2D _currentMouseTexture;
+        public int _mousePointerXOffset;
+
         public Vector2 mousePos;
-        private Cheese _cheese;     
+        private Cheese _cheese;
+
+        private Vector2 _origin
+        {
+            get
+            {
+                return new Vector2(0 + _mousePointerXOffset, 0);
+            }
+        }            
 
         public Player(Game game, Cheese cheese)
             : base (game)
@@ -20,19 +32,26 @@ namespace project4
             game.Components.Add(this);
 
             _cheese = cheese;
+
+            base.Initialize();
+
+            //after base initialize so the texture is available in constructor
+            _currentMouseTexture = _mouseCursorTexture;
+
+            _mousePointerXOffset = 0;
         }
 
         protected override void LoadContent()
         {
             //loads mouse cursor texture
             _mouseCursorTexture = Game.Content.Load<Texture2D>(@"img\mouse");
+            _mousePointerTexture = Game.Content.Load<Texture2D>(@"img\pointer");
 
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
-        {
-            
+        {            
             base.Update(gameTime);
         }
 
@@ -40,12 +59,12 @@ namespace project4
         {
             //draws mouse cursor texture on screen with current mouse position
             Game1.spriteBatch.Draw(
-                _mouseCursorTexture,
+                _currentMouseTexture,
                 mousePos,
                 null,
                 Color.White,
                 0f,
-                Vector2.Zero,
+                _origin,
                 0.3f,
                 SpriteEffects.None,
                 0.5f

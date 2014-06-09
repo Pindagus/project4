@@ -15,12 +15,13 @@ namespace project4
         public int _TileY;
         private float _layerDepth;
         private Vector2 _origin;
-        private int widthOffset = 18;
+        private int widthOffset = 7;
 
         public Texture2D _frontTexture;
         public Texture2D _backTexture;
         public Texture2D _leftTexture;
         public Texture2D _rightTexture;
+        private float _scale;
 
         //get origin
         public Vector2 Origin
@@ -52,6 +53,7 @@ namespace project4
             _TileX = TileX;
             _TileY = TileY;
             _layerDepth = 0.4f;
+            _scale = 0.8f;
 
             base.Initialize();
 
@@ -78,7 +80,7 @@ namespace project4
                     Color.White,
                     0,
                     _origin,
-                    1,
+                    _scale,
                     SpriteEffects.None,
                     _layerDepth
                 );
