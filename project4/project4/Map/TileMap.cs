@@ -115,7 +115,7 @@ namespace project4
                     _tileSetTexture,
                         new Rectangle((x * currentTile.getTileWidth) - baseOffsetX, (y * currentTile.getTileHeight) + baseOffsetY, currentTile.getTileWidth, currentTile.getTileHeight),
                         currentTile.GetSourceRectangle(currentTile.getTileInt),
-                    Color.White,
+                    Color.White * currentTile.transparency,
                     0f,
                     Vector2.Zero,
                     SpriteEffects.None,

@@ -9,6 +9,9 @@ namespace project4
 {
     public class Interactor : GameObject
     {
+        public bool isSelected = false;
+        public float selectionTransparency;
+        public float blingTransparency = 0.8f;
 
         public virtual bool IsHovering
         {
@@ -31,6 +34,29 @@ namespace project4
             : base (game)
         {
 
+
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (isSelected)
+            {
+                if (Game1.elapsedTimeSec >= 2)
+                {
+                    Game1.elapsedTimeSec = 0;
+                }
+
+                if (Game1.elapsedTimeSec > 1)
+                {
+                    selectionTransparency = blingTransparency;
+                }
+                else
+                {
+                    selectionTransparency = 1;
+                }
+            }
+
+            base.Update(gameTime);
         }
 
     }

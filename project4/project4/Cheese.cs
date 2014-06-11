@@ -14,6 +14,10 @@ namespace project4
         public Texture2D _backTexture;
         public Texture2D _leftTexture;
         public Texture2D _rightTexture;
+
+        public bool MovingAllowed = true;
+
+
         
         //private Texture2D debug;
 
@@ -21,7 +25,6 @@ namespace project4
         public Cheese(Game game, int X, int Y)
             : base (game)
         {
-
             TileX = X;
             TileY = Y;
 
@@ -67,8 +70,11 @@ namespace project4
         }
 
         public void Move(int X, int Y){
-            TileX += X;
-            TileY += Y;
+
+            if (MovingAllowed) { 
+                TileX += X;
+                TileY += Y;
+            }
 
             //calculate depth of cheese, so that cheese wil be obscurred by computer for example
             layerDepth = ComputeDepth;

@@ -16,7 +16,7 @@ namespace project4
         public int _mousePointerXOffset;
 
         public Vector2 mousePos;
-        private Cheese _cheese;
+        public Cheese _cheese;
 
         private Vector2 _origin
         {
@@ -26,12 +26,10 @@ namespace project4
             }
         }            
 
-        public Player(Game game, Cheese cheese)
+        public Player(Game game)
             : base (game)
         {
             game.Components.Add(this);
-
-            _cheese = cheese;
 
             base.Initialize();
 

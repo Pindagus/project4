@@ -7,8 +7,9 @@ using System.Text;
 
 namespace project4
 {
-    class Computer : Interactor
+    public class Computer : Interactor
     {
+        public bool assignmentPassed;
 
         public override Rectangle boundingBox
         {
@@ -27,6 +28,10 @@ namespace project4
         public Computer(Game game, int X, int Y)
             : base (game)
         {
+            selectionTransparency = blingTransparency;
+
+            assignmentPassed = false;
+
             scale = 1.2f;
             widthOffset = 28;
             heightOffset = 18;
@@ -52,5 +57,6 @@ namespace project4
 
             base.LoadContent();
         }
+
     }
 }

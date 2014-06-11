@@ -15,6 +15,8 @@ namespace project4
         //For example a player can't walk on a water tile, therefor accessibility has to be false
         public bool accessible = true;
 
+        public float transparency = 1;
+
         public abstract int getTileInt { get; }
 
         public int getTileWidth

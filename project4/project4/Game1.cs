@@ -17,7 +17,6 @@ namespace project4
         public static SpriteBatch spriteBatch;
         public Level _currentLevel;
         public Player _player;
-        private Cheese _cheese;
 
         public static MouseState _previousMouseState;
         public static MouseState _currentMouseState;
@@ -27,7 +26,8 @@ namespace project4
 
         private TitleScreen _titleScreen;
 
-        private bool DEBUG  = true;
+        private bool DEBUG  = false;
+        public static float elapsedTimeSec;
 
         public Game1()
             : base()
@@ -44,14 +44,14 @@ namespace project4
             graphics.IsFullScreen = false;
             //
 
-            _player = new Player(this, _cheese);
+            _player = new Player(this);
 
             //this will set the level immidiately instead of titlescreen, for debug purpose only
             if (DEBUG) { 
-                _cheese = new Cheese(this, 7, 3);
+                //_cheese = new Cheese(this, 7, 3);
 
                 //creates level, the integer determines which level will be loaded
-                _currentLevel = new Level(this, _player, _cheese, 1);
+                _currentLevel = new Level(this, _player, 1);
             }else{
                 //set titleScreen
                 _titleScreen = new TitleScreen(this);
@@ -75,6 +75,8 @@ namespace project4
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            elapsedTimeSec += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             _previousMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();
 
@@ -87,28 +89,48 @@ namespace project4
 
             if(!DEBUG){
                 //check if button is clicked on start screen
-                if (_titleScreen.StartButton.IsClicked){
-                    _cheese = new Cheese(this, 7, 4);
 
-                    //creates level, the integer determines which level will be loaded
-                    _currentLevel = new Level(this, _player, _cheese, 1);
+                //check this only if level isn't visible
+                if (_currentLevel == null){ 
+                    if (_titleScreen.StartButton.IsClicked){
+                        //_cheese = new Cheese(this, 7, 4);
 
-                    //removes start screen's componentes
-                    this.Components.Remove(_titleScreen.StartButton);
-                    this.Components.Remove(_titleScreen.ExitButton);
-                    this.Components.Remove(_titleScreen.Background);
-                }
+                        //creates level, the integer determines which level will be loaded
+                        _currentLevel = new Level(this, _player, 1);
 
-                //exit button
-                if (_titleScreen.ExitButton.IsClicked){
-                    Exit();
+                        //removes start screen's componentes
+                        this.Components.Remove(_titleScreen.StartButton);
+                        this.Components.Remove(_titleScreen.ExitButton);
+                        this.Components.Remove(_titleScreen.Background);
+                    }
+
+                    //exit button
+                    if (_titleScreen.ExitButton.IsClicked){
+                        Exit();
+                    }
                 }
             }
 
-            //TODO check if level is completed and set next level, probably with boolean
-            if (_currentLevel.diamondIsTaken)
-            {
-                _currentLevel = new Level(this, _player, _cheese, 2);
+            //check if level is completed and set next level
+            if(_currentLevel != null){
+                if (_currentLevel.diamondIsTaken)
+                {
+                    _currentLevel.Dispose();
+                    _currentLevel.ClearLists();
+
+                    switch (_currentLevel._currentLevelInt)
+                    {
+                        case 1:
+                            _currentLevel = new Level(this, _player, 2);
+                            break;
+                        case 2:
+                            _currentLevel = new Level(this, _player, 3);
+                            break;
+                        default:
+                            Console.WriteLine("Level integer has unexpected value");
+                            break;
+                    }   
+                }
             }
 
 
@@ -117,7 +139,7 @@ namespace project4
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
             base.Draw(gameTime);
