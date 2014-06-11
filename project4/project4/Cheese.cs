@@ -10,6 +10,8 @@ namespace project4
 {
     public class Cheese : Interactor
     {
+        public String ConsoleName = "Kaas";
+
         public Texture2D _frontTexture;
         public Texture2D _backTexture;
         public Texture2D _leftTexture;
@@ -17,7 +19,7 @@ namespace project4
 
         public bool MovingAllowed = true;
 
-
+        public ActionList actionList;
         
         //private Texture2D debug;
 
@@ -25,8 +27,12 @@ namespace project4
         public Cheese(Game game, int X, int Y)
             : base (game)
         {
+
             TileX = X;
             TileY = Y;
+
+            //creates action list for cheese
+            actionList = new ActionList(game);
 
             layerDepth = ComputeDepth;
             scale = 0.8f;

@@ -16,6 +16,7 @@ namespace project4
         private Cheese _cheese;
         public bool diamondIsTaken;
         private Diamond _diamond;
+        private ConsoleInterface _consoleInterface;
 
         //contains only computers
         public List<Computer> _computerList = new List<Computer>();
@@ -28,7 +29,7 @@ namespace project4
         public List<GameObject> _gameObjectList = new List<GameObject>();
 
         //list with ALL objects, mainly for removing
-        public List<GameObject> _allObjects = new List<GameObject>();
+        public List<GameObject> _allObjects = new List<GameObject>();       
 
         public Level(Game game, Player player, int currentLevel)
             : base(game)
@@ -58,6 +59,9 @@ namespace project4
                 case 1:
                     levelMap = new FirstLevelMap(game);
 
+                    //set console, starting position is outside screen thus unvisible
+                    _consoleInterface = new ConsoleInterface(game);
+
                     Computer _computer1 = new Computer(game, 3, 4);
                     _computerList.Add(_computer1);
                     _interactorList.Add(_computer1);
@@ -81,6 +85,8 @@ namespace project4
                     break;
                 case 2:
                     levelMap = new LevelMap2(game);
+
+                    _consoleInterface = new ConsoleInterface(game);
 
                     Computer _computer3 = new Computer(game, 4, 4);
                     _computerList.Add(_computer3);
@@ -106,6 +112,8 @@ namespace project4
                     break;
                 case 3:
                     levelMap = new LastLevelMap(game);
+
+                    _consoleInterface = new ConsoleInterface(game);
 
                     Computer _computer5 = new Computer(game, 6, 6);
                     _computerList.Add(_computer5);
@@ -138,8 +146,6 @@ namespace project4
 
         public override void Update(GameTime gameTime)
         {
-            //elapsedTimeSec += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             //levels checks if next tile is accessible for cheese
             checkAccessibilityVertical(Keys.Up, ref _cheese.TileY, -1);
             checkAccessibilityVertical(Keys.Down, ref _cheese.TileY, +1);
@@ -148,10 +154,16 @@ namespace project4
 
             //if boolean isnt used then the last in the list will override de pointer, this isn't the wanted effect
             bool hovering = false;
+            //this boolean will be used on disabling, to check if was clicked on interactor
+            bool oneOfInteractorsIsClicked = false;
 
             //loop through interactor, they'll have a different mouse when hovering
             foreach (Interactor interactor in _interactorList)
             {
+                if (!oneOfInteractorsIsClicked && interactor.IsClicked){
+                    oneOfInteractorsIsClicked = true;
+                }
+
                 if (!hovering){
                     if (interactor.IsHovering){
                         hovering = true;
@@ -177,15 +189,62 @@ namespace project4
                     //TODO the assignment and console will be made here, the console or computer checks if assignment is passed
                     computer.assignmentPassed = true;
 
+                    //set console and runbutton visible
+                    _consoleInterface.console._position.X = (float)_consoleInterface.visiblePosX;
+                    _consoleInterface.RunButton._position.X = (float)_consoleInterface.visiblePosX;
+
                     Console.WriteLine("Computer was clicked");
                 }
 
-                //disable computer blinking selection after clicking next to computer
-                if (Game1._previousMouseState.LeftButton == ButtonState.Released && Game1._currentMouseState.LeftButton == ButtonState.Pressed && !computer.IsClicked && computer.isSelected)
+                if(computer.isSelected){
+
+                    //TODO for more interactor this has to be a loop through the interactorslist
+                    if (_cheese.IsClicked)
+                    {
+                        //cheese clicked after computer was selected
+
+                        //set cheese as currentConsoleObject, because it has to be displayed in the console
+                        _consoleInterface.currentObject = _cheese.ConsoleName;
+
+                        //set background of action list of cheese visible
+                        _cheese.actionList.background._position.X = _cheese.ComputePos.X;
+                        _cheese.actionList.background._position.Y = _cheese.ComputePos.Y;
+
+                        //set jumpbutton
+                        _cheese.actionList.JumpButton._position.X = _cheese.ComputePos.X;
+                        _cheese.actionList.JumpButton._position.Y = _cheese.ComputePos.Y;
+
+                        Console.WriteLine(_consoleInterface.currentObject);
+
+                        Console.WriteLine("Cheese was clicked after clicking computer");
+                    }
+                }
+
+                //disable computer blinking selection after clicking next to computer 
+                //and next to the console with its runbutton, 
+                //don't disable if interactor was clicked
+                //don't disable if cheese's actionlist was clicked
+                if (Game1._previousMouseState.LeftButton == ButtonState.Released && Game1._currentMouseState.LeftButton == ButtonState.Pressed && !computer.IsClicked && computer.isSelected
+                    && !_consoleInterface.RunButton.IsClicked
+                    && !_consoleInterface.console.IsClicked
+                    && !oneOfInteractorsIsClicked
+                    && !_cheese.actionList.background.IsClicked
+                    )
                 {
                     _cheese.MovingAllowed = true;
                     computer.isSelected = false;
                     computer.selectionTransparency = computer.blingTransparency;
+
+                    //set console and runbutton unvisible and outside screen
+                    _consoleInterface.console._position.X = (float)_consoleInterface.posOutsideScreenX;
+                    _consoleInterface.RunButton._position.X = (float)_consoleInterface.posOutsideScreenX;
+
+                    //disable action list of cheese
+                    _cheese.actionList.background._position.X = ActionList.posOutsideScreenX;
+
+                    //set jumpbutton
+                    _cheese.actionList.JumpButton._position.X = ActionList.posOutsideScreenX;
+
                     Console.WriteLine("Disable selection");
                 }
 
@@ -208,11 +267,9 @@ namespace project4
                     diamondIsTaken = true;
                 }
             }
-            
 
-            if (_cheese.IsClicked){
-                //TODO handle cheese actions after clicking the computer
-                Console.WriteLine("Cheese was clicked");
+            if(_consoleInterface.RunButton.IsClicked){
+                Console.WriteLine("Console Runbutton was clicked");
             }
 
             base.Update(gameTime);
@@ -315,8 +372,9 @@ namespace project4
 
         internal new void Dispose()
         {
-            //deletes Map on his own, it doesn't fits in the _allObjectsList due to its different type 
+            //deletes this on its own, it doesn't fits in the _allObjectsList due to its different type 
             Game.Components.Remove(levelMap);
+            Game.Components.Remove(_consoleInterface);
 
             //delete all other game object
             foreach (GameObject gameobject in _allObjects){

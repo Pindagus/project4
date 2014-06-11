@@ -8,10 +8,10 @@ using System.Text;
 
 namespace project4
 {
-    class ScreenElement : DrawableGameComponent
+    public class ScreenElement : DrawableGameComponent
     {
         private string _file;
-        private Vector2 _position;
+        public Vector2 _position;
         private Texture2D _texture;
         private float _layerDepth;
 
@@ -47,11 +47,13 @@ namespace project4
         public ScreenElement(Game game, String file, Vector2 position, float layerDepth)
             : base(game)
         {
-            game.Components.Add(this);
-
             _file = file;
             _position = position;
             _layerDepth = layerDepth;
+
+            game.Components.Add(this);
+
+            
         }
 
         public override void Update(GameTime gameTime)
