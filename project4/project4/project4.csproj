@@ -63,6 +63,7 @@
     <Compile Include="Screen\Screen.cs" />
     <Compile Include="Screen\ScreenElement.cs" />
     <Compile Include="Screen\TitleScreen.cs" />
+    <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
