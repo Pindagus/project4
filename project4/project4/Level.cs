@@ -430,6 +430,11 @@ namespace project4
             foreach (GameObject gameobject in _allObjects){
                 Game.Components.Remove(gameobject);   
             }
+
+            //removes actionlists per level below
+            // cheese actionlist
+            Game.Components.Remove(_cheese.actionList.background);
+            Game.Components.Remove(_cheese.actionList.JumpButton); 
         }
     }
 }
