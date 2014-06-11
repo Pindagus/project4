@@ -18,6 +18,8 @@ namespace project4
         private Diamond _diamond;
         private ConsoleInterface _consoleInterface;
 
+        private bool correctActionWasChosen;       
+
         //contains only computers
         public List<Computer> _computerList = new List<Computer>();
 
@@ -29,7 +31,7 @@ namespace project4
         public List<GameObject> _gameObjectList = new List<GameObject>();
 
         //list with ALL objects, mainly for removing
-        public List<GameObject> _allObjects = new List<GameObject>();       
+        public List<GameObject> _allObjects = new List<GameObject>();
 
         public Level(Game game, Player player, int currentLevel)
             : base(game)
@@ -62,13 +64,13 @@ namespace project4
                     //set console, starting position is outside screen thus unvisible
                     _consoleInterface = new ConsoleInterface(game);
 
-                    Computer _computer1 = new Computer(game, 3, 4);
+                    Computer _computer1 = new Computer(game, 3, 4, "Jump");
                     _computerList.Add(_computer1);
                     _interactorList.Add(_computer1);
                     _gameObjectList.Add(_computer1);
                     _allObjects.Add(_computer1);
 
-                    Computer _computer2 = new Computer(game, 6, 6);
+                    Computer _computer2 = new Computer(game, 6, 6, "Jump");
                     _computerList.Add(_computer2);
                     _interactorList.Add(_computer2);
                     _gameObjectList.Add(_computer2);
@@ -88,13 +90,13 @@ namespace project4
 
                     _consoleInterface = new ConsoleInterface(game);
 
-                    Computer _computer3 = new Computer(game, 4, 4);
+                    Computer _computer3 = new Computer(game, 4, 4, "Jump");
                     _computerList.Add(_computer3);
                     _interactorList.Add(_computer3);
                     _gameObjectList.Add(_computer3);
                     _allObjects.Add(_computer3);
 
-                    Computer _computer4 = new Computer(game, 9, 4);
+                    Computer _computer4 = new Computer(game, 9, 4, "Jump");
                     _computerList.Add(_computer4);
                     _interactorList.Add(_computer4);
                     _gameObjectList.Add(_computer4);
@@ -115,13 +117,13 @@ namespace project4
 
                     _consoleInterface = new ConsoleInterface(game);
 
-                    Computer _computer5 = new Computer(game, 6, 6);
+                    Computer _computer5 = new Computer(game, 6, 6, "Jump");
                     _computerList.Add(_computer5);
                     _interactorList.Add(_computer5);
                     _gameObjectList.Add(_computer5);
                     _allObjects.Add(_computer5);
 
-                    Computer _computer6 = new Computer(game, 6, 2);
+                    Computer _computer6 = new Computer(game, 6, 2, "Jump");
                     _computerList.Add(_computer6);
                     _interactorList.Add(_computer6);
                     _gameObjectList.Add(_computer6);
@@ -157,7 +159,10 @@ namespace project4
             //this boolean will be used on disabling, to check if was clicked on interactor
             bool oneOfInteractorsIsClicked = false;
 
+
             //loop through interactor, they'll have a different mouse when hovering
+            // console's runbutton has also a different hover texture
+            // and cheese actionlist
             foreach (Interactor interactor in _interactorList)
             {
                 if (!oneOfInteractorsIsClicked && interactor.IsClicked){
@@ -165,7 +170,7 @@ namespace project4
                 }
 
                 if (!hovering){
-                    if (interactor.IsHovering){
+                    if (interactor.IsHovering || _consoleInterface.RunButton.IsHovering || _cheese.actionList.background.IsHovering){
                         hovering = true;
                         _player._mousePointerXOffset = 100;
                         _player._currentMouseTexture = _player._mousePointerTexture;
@@ -176,6 +181,7 @@ namespace project4
                     }
                 }
             }
+            
         
             //loop through computerlist
             foreach(Computer computer in _computerList){
@@ -184,10 +190,7 @@ namespace project4
                 if(computer.IsClicked && ComputerSelectionRange(computer)){
 
                     computer.isSelected = true;
-                    _cheese.MovingAllowed = false;
-
-                    //TODO the assignment and console will be made here, the console or computer checks if assignment is passed
-                    computer.assignmentPassed = true;
+                    _cheese.MovingAllowed = false;                    
 
                     //set console and runbutton visible
                     _consoleInterface.console._position.X = (float)_consoleInterface.visiblePosX;
@@ -197,12 +200,9 @@ namespace project4
                 }
 
                 if(computer.isSelected){
-
-                    //TODO for more interactor this has to be a loop through the interactorslist
                     if (_cheese.IsClicked)
                     {
                         //cheese clicked after computer was selected
-
                         //set cheese as currentConsoleObject, because it has to be displayed in the console
                         _consoleInterface.currentObject = _cheese.ConsoleName;
 
@@ -218,6 +218,48 @@ namespace project4
 
                         Console.WriteLine("Cheese was clicked after clicking computer");
                     }
+
+                    //check if chosen action is the right one of that computer
+
+                    //check buttons of cheese's action list
+                    if(_cheese.actionList.JumpButton.IsClicked){
+                        
+                        Console.WriteLine("JumpButton clicked");
+                        if(computer.Assignment == "Jump"){
+
+                            correctActionWasChosen = true;
+
+                            //set current method in console
+                            _consoleInterface.currentMethod = "spring()";
+
+                            Console.WriteLine("Rigth action was chosen");
+                        }else{
+
+                            //TODO show the player that their answer was uncorrect
+
+                            Console.WriteLine("Rigth action was NOT chosen");
+                        }
+                    }
+
+                    //assignment passed if runbutton is clicked and if right action was chosen
+                    if (_consoleInterface.RunButton.IsClicked)
+                    {
+                        if (correctActionWasChosen)
+                        {                
+                            computer.assignmentPassed = true;
+
+                            disableSelection(computer);
+
+                            resetProgrammingTools();
+
+                            correctActionWasChosen = false;
+                            Console.WriteLine("Console Runbutton was clicked and chose action was right");
+                        }
+                        else
+                        {
+                            Console.WriteLine("This answer is uncorrect");
+                        }
+                    }
                 }
 
                 //disable computer blinking selection after clicking next to computer 
@@ -231,23 +273,10 @@ namespace project4
                     && !_cheese.actionList.background.IsClicked
                     )
                 {
-                    _cheese.MovingAllowed = true;
-                    computer.isSelected = false;
-                    computer.selectionTransparency = computer.blingTransparency;
+                    disableSelection(computer);
 
-                    //set console and runbutton unvisible and outside screen
-                    _consoleInterface.console._position.X = (float)_consoleInterface.posOutsideScreenX;
-                    _consoleInterface.RunButton._position.X = (float)_consoleInterface.posOutsideScreenX;
-
-                    //disable action list of cheese
-                    _cheese.actionList.background._position.X = ActionList.posOutsideScreenX;
-
-                    //set jumpbutton
-                    _cheese.actionList.JumpButton._position.X = ActionList.posOutsideScreenX;
-
-                    Console.WriteLine("Disable selection");
+                    resetProgrammingTools();
                 }
-
             }
 
             //check if player has grabbed diamond, set true if all computer assignments are passed also
@@ -268,11 +297,14 @@ namespace project4
                 }
             }
 
-            if(_consoleInterface.RunButton.IsClicked){
-                Console.WriteLine("Console Runbutton was clicked");
-            }
-
             base.Update(gameTime);
+        }
+
+        public void disableSelection(Computer computer)
+        {
+            _cheese.MovingAllowed = true;
+            computer.isSelected = false;
+            computer.selectionTransparency = computer.blingTransparency;
         }
 
         //returns true if player stands on tiles next to computer
@@ -299,7 +331,27 @@ namespace project4
             return false;
         }
 
-        //set selection tiles around computer a little transparent, after clicking the computer on these selection tile it will blink
+        //hide console and run button, resets containing words
+        public void resetProgrammingTools()
+        {
+            //set console and runbutton unvisible and outside screen
+            _consoleInterface.console._position.X = (float)_consoleInterface.posOutsideScreenX;
+            _consoleInterface.RunButton._position.X = (float)_consoleInterface.posOutsideScreenX;
+
+            //disable action list of cheese
+            _cheese.actionList.background._position.X = ActionList.posOutsideScreenX;
+
+            //set jumpbutton
+            _cheese.actionList.JumpButton._position.X = ActionList.posOutsideScreenX;
+
+            //empty all console strings
+            _consoleInterface.currentObject = "";
+            _consoleInterface.currentMethod = "";
+
+            Console.WriteLine("Disable selection");
+        }
+
+        //set selection tiles around computer a little transparent, after clicking the computer these selection tiles will blink
         private void setComputerSelectionTile(Computer computer){
             //row1
             levelMap.Rows[computer.TileY - 1].Columns[computer.TileX - 1].transparency = computer.selectionTransparency;
@@ -321,8 +373,6 @@ namespace project4
         {
             levelMap.Rows[interactor.TileY].Columns[interactor.TileX].transparency = interactor.selectionTransparency;
         }
-
-        //TODO set tile around computer with other transparancy
 
         public void checkAccessibilityVertical(Keys key, ref int tile, int direction){
             if (Game1._currentKeyboardState.IsKeyDown(key)){

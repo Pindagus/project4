@@ -26,7 +26,7 @@ namespace project4
 
         private TitleScreen _titleScreen;
 
-        private bool DEBUG  = true;
+        private bool DEBUG  = false;
         public static float elapsedTimeSec;
 
         public Game1()

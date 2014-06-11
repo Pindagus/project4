@@ -137,6 +137,9 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\Verdana.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\img\GameObjects\ActionList\Thumbs.db" />
     <None Include="Content\img\GameObjects\Console\Thumbs.db" />
     <None Include="Content\img\Thumbs.db" />

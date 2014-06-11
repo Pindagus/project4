@@ -9,6 +9,7 @@ namespace project4
 {
     public class Computer : Interactor
     {
+        public String Assignment;
         public bool assignmentPassed;
 
         public override Rectangle boundingBox
@@ -25,11 +26,12 @@ namespace project4
         }
 
         //constructor
-        public Computer(Game game, int X, int Y)
+        public Computer(Game game, int X, int Y, String assignment)
             : base (game)
         {
             selectionTransparency = blingTransparency;
 
+            Assignment = assignment;
             assignmentPassed = false;
 
             scale = 1.2f;
