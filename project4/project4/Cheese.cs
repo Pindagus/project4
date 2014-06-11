@@ -31,8 +31,8 @@ namespace project4
             TileX = X;
             TileY = Y;
 
-            //creates action list for cheese
-            actionList = new ActionList(game);
+            //creates action list for cheese, second parameter is name of class this will make clear which list to create
+            actionList = new ActionList(game, this.GetType().Name);
 
             layerDepth = ComputeDepth;
             scale = 0.8f;

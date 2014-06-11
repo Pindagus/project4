@@ -19,7 +19,7 @@ namespace project4
 
         private Vector2 listPosition;
 
-        public ActionList(Game game)
+        public ActionList(Game game, String interactor)
             : base(game)
         {
             game.Components.Add(this);
@@ -29,11 +29,14 @@ namespace project4
             //set start position outside screen
             posX = posOutsideScreenX;
 
-            //creates background
-            background = new ScreenElement(game, @"img\GameObjects\ActionList\background.png", listPosition, 0.8f);
+            // create list of specific interactor
+            if(interactor == "Cheese"){
+                //creates background
+                background = new ScreenElement(game, @"img\GameObjects\ActionList\background.png", listPosition, 0.8f);
 
-            //creates Startbutton
-            JumpButton = new ScreenElement(game, @"img\GameObjects\ActionList\jumpButton.png", new Vector2(posOutsideScreenX, listPosition.Y), 0.9f);
+                //creates Startbutton
+                JumpButton = new ScreenElement(game, @"img\GameObjects\ActionList\jumpButton.png", new Vector2(posOutsideScreenX, listPosition.Y), 0.9f);
+            }
         }
 
     }

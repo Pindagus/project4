@@ -185,97 +185,106 @@ namespace project4
         
             //loop through computerlist
             foreach(Computer computer in _computerList){
+
                 setComputerSelectionTile(computer);
 
-                if(computer.IsClicked && ComputerSelectionRange(computer)){
+                //computer assignment cannot be done 2 times if player has passed computer's assignment
+                if(!computer.assignmentPassed){
 
-                    computer.isSelected = true;
-                    _cheese.MovingAllowed = false;                    
+                    if(computer.IsClicked && ComputerSelectionRange(computer)){
 
-                    //set console and runbutton visible
-                    _consoleInterface.console._position.X = (float)_consoleInterface.visiblePosX;
-                    _consoleInterface.RunButton._position.X = (float)_consoleInterface.visiblePosX;
+                        computer.isSelected = true;
+                        _cheese.MovingAllowed = false;                    
 
-                    Console.WriteLine("Computer was clicked");
-                }
+                        //set console and runbutton visible
+                        _consoleInterface.console._position.X = (float)_consoleInterface.visiblePosX;
+                        _consoleInterface.RunButton._position.X = (float)_consoleInterface.visiblePosX;
 
-                if(computer.isSelected){
-                    if (_cheese.IsClicked)
-                    {
-                        //cheese clicked after computer was selected
-                        //set cheese as currentConsoleObject, because it has to be displayed in the console
-                        _consoleInterface.currentObject = _cheese.ConsoleName;
-
-                        //set background of action list of cheese visible
-                        _cheese.actionList.background._position.X = _cheese.ComputePos.X;
-                        _cheese.actionList.background._position.Y = _cheese.ComputePos.Y;
-
-                        //set jumpbutton
-                        _cheese.actionList.JumpButton._position.X = _cheese.ComputePos.X;
-                        _cheese.actionList.JumpButton._position.Y = _cheese.ComputePos.Y;
-
-                        Console.WriteLine(_consoleInterface.currentObject);
-
-                        Console.WriteLine("Cheese was clicked after clicking computer");
+                        Console.WriteLine("Computer was clicked");
                     }
 
-                    //check if chosen action is the right one of that computer
-
-                    //check buttons of cheese's action list
-                    if(_cheese.actionList.JumpButton.IsClicked){
-                        
-                        Console.WriteLine("JumpButton clicked");
-                        if(computer.Assignment == "Jump"){
-
-                            correctActionWasChosen = true;
-
-                            //set current method in console
-                            _consoleInterface.currentMethod = "spring()";
-
-                            Console.WriteLine("Rigth action was chosen");
-                        }else{
-
-                            //TODO show the player that their answer was uncorrect
-
-                            Console.WriteLine("Rigth action was NOT chosen");
-                        }
-                    }
-
-                    //assignment passed if runbutton is clicked and if right action was chosen
-                    if (_consoleInterface.RunButton.IsClicked)
-                    {
-                        if (correctActionWasChosen)
-                        {                
-                            computer.assignmentPassed = true;
-
-                            disableSelection(computer);
-
-                            resetProgrammingTools();
-
-                            correctActionWasChosen = false;
-                            Console.WriteLine("Console Runbutton was clicked and chose action was right");
-                        }
-                        else
+                    if(computer.isSelected){
+                        if (_cheese.IsClicked)
                         {
-                            Console.WriteLine("This answer is uncorrect");
+                            //cheese clicked after computer was selected
+                            //set cheese as currentConsoleObject, because it has to be displayed in the console
+                            _consoleInterface.currentObject = _cheese.ConsoleName;
+
+                            //set background of action list of cheese visible
+                            _cheese.actionList.background._position.X = _cheese.ComputePos.X;
+                            _cheese.actionList.background._position.Y = _cheese.ComputePos.Y;
+
+                            //set jumpbutton
+                            _cheese.actionList.JumpButton._position.X = _cheese.ComputePos.X;
+                            _cheese.actionList.JumpButton._position.Y = _cheese.ComputePos.Y;
+
+                            Console.WriteLine(_consoleInterface.currentObject);
+
+                            Console.WriteLine("Cheese was clicked after clicking computer");
+                        }
+
+                        //check if chosen action is the right one of that computer
+
+                        //check buttons of cheese's action list
+                        if(_cheese.actionList.JumpButton.IsClicked){
+                        
+                            Console.WriteLine("JumpButton clicked");
+                            if(computer.Assignment == "Jump"){
+
+                                correctActionWasChosen = true;
+
+                                //set current method in console
+                                _consoleInterface.currentMethod = "spring()";
+
+                                Console.WriteLine("Rigth action was chosen");
+                            }else{
+
+                                //TODO show the player that their answer was uncorrect
+
+                                Console.WriteLine("Rigth action was NOT chosen");
+                            }
+                        }
+
+                        //assignment passed if runbutton is clicked and if right action was chosen
+                        if (_consoleInterface.RunButton.IsClicked)
+                        {
+                            if (correctActionWasChosen)
+                            {                
+                                computer.assignmentPassed = true;
+
+                                disableSelection(computer);
+
+                                resetProgrammingTools();
+
+                                correctActionWasChosen = false;
+                                Console.WriteLine("Console Runbutton was clicked and chose action was right");
+                            }
+                            else
+                            {
+                                Console.WriteLine("This answer is uncorrect");
+                            }
                         }
                     }
+
+                    //disable computer blinking selection after clicking next to computer 
+                    //and next to the console with its runbutton, 
+                    //don't disable if interactor was clicked
+                    //don't disable if cheese's actionlist was clicked
+                    if (Game1._previousMouseState.LeftButton == ButtonState.Released && Game1._currentMouseState.LeftButton == ButtonState.Pressed && !computer.IsClicked && computer.isSelected
+                        && !_consoleInterface.RunButton.IsClicked
+                        && !_consoleInterface.console.IsClicked
+                        && !oneOfInteractorsIsClicked
+                        && !_cheese.actionList.background.IsClicked
+                        )
+                    {
+                        disableSelection(computer);
+
+                        resetProgrammingTools();
+                    }
                 }
-
-                //disable computer blinking selection after clicking next to computer 
-                //and next to the console with its runbutton, 
-                //don't disable if interactor was clicked
-                //don't disable if cheese's actionlist was clicked
-                if (Game1._previousMouseState.LeftButton == ButtonState.Released && Game1._currentMouseState.LeftButton == ButtonState.Pressed && !computer.IsClicked && computer.isSelected
-                    && !_consoleInterface.RunButton.IsClicked
-                    && !_consoleInterface.console.IsClicked
-                    && !oneOfInteractorsIsClicked
-                    && !_cheese.actionList.background.IsClicked
-                    )
+                else
                 {
-                    disableSelection(computer);
-
-                    resetProgrammingTools();
+                    computer.selectionTransparency = 1;
                 }
             }
 

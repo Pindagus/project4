@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Audio;
 #endregion
 
 namespace project4
@@ -28,6 +29,10 @@ namespace project4
 
         private bool DEBUG  = false;
         public static float elapsedTimeSec;
+
+        //audio
+        SoundEffectInstance instance;
+        SoundEffect tileScreenTune;
 
         public Game1()
             : base()
@@ -54,16 +59,25 @@ namespace project4
                 _currentLevel = new Level(this, _player, 1);
             }else{
                 //set titleScreen
-                _titleScreen = new TitleScreen(this);
+                _titleScreen = new TitleScreen(this);                
             }
-            
 
             base.Initialize();
+
+            if(!DEBUG){
+                // titlescreen tune in loop
+                instance = tileScreenTune.CreateInstance();
+                instance.IsLooped = true;
+                instance.Volume = 0.5f;
+                instance.Play();
+            }
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);   
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            tileScreenTune = Content.Load<SoundEffect>(@"audio\tune\titleScreenTune");
         }
        
         protected override void UnloadContent()
