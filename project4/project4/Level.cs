@@ -17,6 +17,7 @@ namespace project4
         public bool diamondIsTaken;
         private Diamond _diamond;
         private ConsoleInterface _consoleInterface;
+       // private Tree _tree;
 
         private bool correctActionWasChosen;       
 
@@ -32,6 +33,8 @@ namespace project4
 
         //list with ALL objects, mainly for removing
         public List<GameObject> _allObjects = new List<GameObject>();
+
+      //  public List<GameObject> _treeList = new List<GameObject>();
 
         public Level(Game game, Player player, int currentLevel)
             : base(game)
@@ -83,6 +86,13 @@ namespace project4
                     foreach (GameObject gameObject in _gameObjectList){
                         setAccessibility(gameObject);
                     }
+
+              //      foreach(Brown brown in FirstLevelMap){
+
+               //         _treeList.Add(new Tree(this, new Vector2((Brown.Position.X ), (Brown.Position.Y - Height))));
+                        
+               //     }
+
 
                     break;
                 case 2:
