@@ -8,7 +8,6 @@ namespace project4
 {
     class FirstLevelMap: TileMap
     {
-        public List<FirstLevelMap> _BrownOne = new List<FirstLevelMap>();
         public FirstLevelMap(Game game)
             : base(game)
         {
@@ -119,6 +118,11 @@ namespace project4
 
 
             //pad
+            Rows[6].Columns[2] = new Stone();
+            Rows[5].Columns[2] = new Stone();
+            Rows[4].Columns[2] = new Stone();
+            Rows[4].Columns[3] = new Stone();
+
             Rows[4].Columns[4] = new Stone();
             Rows[4].Columns[5] = new Stone();
             Rows[4].Columns[6] = new Stone();
@@ -127,11 +131,6 @@ namespace project4
             Rows[6].Columns[7] = new Stone();
             Rows[7].Columns[7] = new Stone();
             Rows[8].Columns[7] = new Stone();
-
-            //foreach Brown{
-            
-            //}
-               
             //-------------------------------------------------------------------------------------------------------------------
         }
 

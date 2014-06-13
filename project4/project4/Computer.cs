@@ -11,6 +11,7 @@ namespace project4
     {
         public String Assignment;
         public bool assignmentPassed;
+        public float StandingOnTilesTransparency = 0.3f;
 
         public override Rectangle boundingBox
         {

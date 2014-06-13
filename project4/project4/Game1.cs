@@ -29,10 +29,11 @@ namespace project4
 
         private bool DEBUG  = false;
         public static float elapsedTimeSec;
+        public static float overallTime;
 
         //audio
         SoundEffectInstance instance;
-        SoundEffect tileScreenTune;
+        SoundEffect Tune1;
 
         public Game1()
             : base()
@@ -46,7 +47,7 @@ namespace project4
             //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             //
 
             _player = new Player(this);
@@ -56,7 +57,7 @@ namespace project4
                 //_cheese = new Cheese(this, 7, 3);
 
                 //creates level, the integer determines which level will be loaded
-                _currentLevel = new Level(this, _player, 1);
+                _currentLevel = new Level(this, _player, 3, 6, 1);
             }else{
                 //set titleScreen
                 _titleScreen = new TitleScreen(this);                
@@ -66,7 +67,7 @@ namespace project4
 
             if(!DEBUG){
                 // titlescreen tune in loop
-                instance = tileScreenTune.CreateInstance();
+                instance = Tune1.CreateInstance();
                 instance.IsLooped = true;
                 instance.Volume = 0.5f;
                 instance.Play();
@@ -77,7 +78,7 @@ namespace project4
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            tileScreenTune = Content.Load<SoundEffect>(@"audio\tune\titleScreenTune");
+            Tune1 = Content.Load<SoundEffect>(@"audio\tune\tune1");
         }
        
         protected override void UnloadContent()
@@ -90,6 +91,7 @@ namespace project4
                 Exit();
 
             elapsedTimeSec += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            overallTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _previousMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();
@@ -106,11 +108,20 @@ namespace project4
 
                 //check this only if level isn't visible
                 if (_currentLevel == null){ 
+                    //show hover texture after hovering screen buttons
+                    if (_titleScreen.StartButton.IsHovering || _titleScreen.ExitButton.IsHovering){
+                        _player._mousePointerXOffset = 100;
+                        _player._currentMouseTexture = _player._mousePointerTexture;
+                    }else{
+                        _player._mousePointerXOffset = 0;
+                        _player._currentMouseTexture = _player._mouseCursorTexture;
+                    }
+
                     if (_titleScreen.StartButton.IsClicked){
                         //_cheese = new Cheese(this, 7, 4);
 
                         //creates level, the integer determines which level will be loaded
-                        _currentLevel = new Level(this, _player, 1);
+                        _currentLevel = new Level(this, _player, 1, 2, 6);
 
                         //removes start screen's componentes
                         this.Components.Remove(_titleScreen.StartButton);
@@ -135,10 +146,10 @@ namespace project4
                     switch (_currentLevel._currentLevelInt)
                     {
                         case 1:
-                            _currentLevel = new Level(this, _player, 2);
+                            _currentLevel = new Level(this, _player, 2, 6, 1);
                             break;
                         case 2:
-                            _currentLevel = new Level(this, _player, 3);
+                            _currentLevel = new Level(this, _player, 3, 6, 1);
                             break;
                         default:
                             Console.WriteLine("Level integer has unexpected value");

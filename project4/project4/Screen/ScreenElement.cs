@@ -12,7 +12,7 @@ namespace project4
     {
         private string _file;
         public Vector2 _position;
-        private Texture2D _texture;
+        public Texture2D _texture;
         private float _layerDepth;
 
         public Rectangle boundingBox

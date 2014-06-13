@@ -15,7 +15,7 @@ namespace project4
         public TitleScreen(Game game) { 
 
         //creates background    
-            Background = new ScreenElement(game, @"img\ScreenElements\background.jpg", new Vector2(0, 0), 0);
+            Background = new ScreenElement(game, @"img\ScreenElements\background", new Vector2(0, 0), 0);
 
         //creates Startbutton
             StartButton = new ScreenElement(game, @"img\ScreenElements\start", new Vector2(450, 280), 0.2f);

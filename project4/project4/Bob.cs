@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,48 +7,39 @@ using System.Text;
 
 namespace project4
 {
-    public class Cheese : Interactor
+    class Bob : Interactor
     {
-        public String ConsoleName = "Kaas";
-
-        public Texture2D _frontTexture;
-        public Texture2D _backTexture;
-        public Texture2D _leftTexture;
-        public Texture2D _rightTexture;
+        public String ConsoleName = "Bob";
 
         public bool MovingAllowed = true;
 
         public ActionList actionList;
-        public int startingTileX;
-        public int startingTileY;
         
         //private Texture2D debug;
 
         //constructor
-        public Cheese(Game game, int X, int Y)
+        public Bob(Game game, int X, int Y)
             : base (game)
         {
-            startingTileX = X;
-            startingTileY = Y;
 
             TileX = X;
             TileY = Y;
 
-            //creates action list for cheese, second parameter is name of class this will make clear which list to create
+            //creates action list for bob, second parameter is name of class this will make clear which list to create
             actionList = new ActionList(game, this.GetType().Name);
 
             layerDepth = ComputeDepth;
-            scale = 0.8f;
+            scale = 1.5f;
 
-            widthOffset = 7;
+            widthOffset = 17;
+            heightOffset = 20;
 
             base.Initialize();
 
             //after base initialize so the texture is available in the constructor
-            texture = _frontTexture;
             Origin = new Vector2(
                     widthOffset,
-                    texture.Height - BaseTile.TileHeight
+                    texture.Height - BaseTile.TileHeight + heightOffset
                     );
         }
 
@@ -59,10 +49,7 @@ namespace project4
             //debug = new Texture2D(GraphicsDevice, 1, 1);
             //debug.SetData(new Color[] { Color.White });
 
-            _frontTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\front_view");
-            _backTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\back_view");
-            _leftTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\left_view");
-            _rightTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\right_view");
+            texture = Game.Content.Load<Texture2D>(@"img\GameObjects\bob");
 
             base.LoadContent();
         }
@@ -72,22 +59,11 @@ namespace project4
             //draw debug boundingbox
             //Game1.spriteBatch.Draw(
             //    debug,
-            //    boundingBox,
+            //    hoverBox,
             //    Color.White
             //    );
 
             base.Draw(gameTime);
-        }
-
-        public void Move(int X, int Y){
-
-            if (MovingAllowed) { 
-                TileX += X;
-                TileY += Y;
-            }
-
-            //calculate depth of cheese, so that cheese wil be obscurred by computer for example
-            layerDepth = ComputeDepth;
         }
 
         public Rectangle hoverBox
@@ -96,9 +72,9 @@ namespace project4
             {
                 return new Rectangle(
                         (int)ComputePos.X,
-                        (int)ComputePos.Y + BaseTile.TileHeight - texture.Height + 20,
+                        (int)ComputePos.Y + BaseTile.TileHeight - texture.Height - 50,
                         (int)BaseTile.TileWidth,
-                        (int)texture.Height - 60
+                        (int)texture.Height + 15
                     );
             }    
         }

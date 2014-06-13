@@ -64,6 +64,8 @@ namespace project4
             Rows[9].Columns[9] = new Brown();
             Rows[9].Columns[10] = new Brown();
             Rows[9].Columns[11] = new Brown();
+
+            Rows[9].Columns[6] = new Brown();
             //rivier
             Rows[0].Columns[1] = new Water();
             Rows[0].Columns[2] = new Water();
@@ -108,10 +110,38 @@ namespace project4
             Rows[4].Columns[6] = new Dirt();
             Rows[7].Columns[6] = new Dirt();
             Rows[8].Columns[6] = new Dirt();
-            Rows[9].Columns[6] = new Dirt();
+
+            Rows[8].Columns[7] = new Dirt();
+            Rows[8].Columns[8] = new Dirt();
+            Rows[8].Columns[9] = new Dirt();
+            Rows[8].Columns[10] = new Dirt();
+            Rows[8].Columns[11] = new Dirt();
+            Rows[8].Columns[12] = new Dirt();
+
             //water die in brug verandert
             Rows[5].Columns[6] = new Water();
             Rows[6].Columns[6] = new Water();
+
+            Rows[6].Columns[12] = new Water();
+            Rows[5].Columns[12] = new Water();
+            Rows[4].Columns[12] = new Water();
+            Rows[3].Columns[12] = new Water();
+            Rows[2].Columns[12] = new Water();
+            Rows[1].Columns[12] = new Water();
+            Rows[0].Columns[12] = new Water();
+
+            Rows[6].Columns[13] = new Water();
+            Rows[5].Columns[13] = new Water();
+            Rows[4].Columns[13] = new Water();
+            Rows[3].Columns[13] = new Water();
+            Rows[2].Columns[13] = new Water();
+            Rows[1].Columns[13] = new Water();
+            Rows[0].Columns[13] = new Water();
+
+            Rows[7].Columns[13] = new Brown();
+            Rows[8].Columns[13] = new Brown();
+            Rows[9].Columns[13] = new Brown();
+            Rows[9].Columns[12] = new Brown();
             //-------------------------------------------------------------------------------------------------------------------
         }
 

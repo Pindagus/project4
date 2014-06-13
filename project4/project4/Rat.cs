@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,48 +7,38 @@ using System.Text;
 
 namespace project4
 {
-    public class Cheese : Interactor
+    public class Rat : Interactor
     {
-        public String ConsoleName = "Kaas";
+        public String ConsoleName = "Rat";
 
-        public Texture2D _frontTexture;
-        public Texture2D _backTexture;
-        public Texture2D _leftTexture;
-        public Texture2D _rightTexture;
-
-        public bool MovingAllowed = true;
-
-        public ActionList actionList;
-        public int startingTileX;
-        public int startingTileY;
+        public bool MovingAllowed;
+        public int direction = 1;
+        private int prevTime;
+        private int currentTime;
         
         //private Texture2D debug;
 
         //constructor
-        public Cheese(Game game, int X, int Y)
+        public Rat(Game game, int X, int Y,bool movingAllowed = false)
             : base (game)
         {
-            startingTileX = X;
-            startingTileY = Y;
+            MovingAllowed = movingAllowed;
 
             TileX = X;
             TileY = Y;
 
-            //creates action list for cheese, second parameter is name of class this will make clear which list to create
-            actionList = new ActionList(game, this.GetType().Name);
-
             layerDepth = ComputeDepth;
-            scale = 0.8f;
+            scale = 0.4f;
 
-            widthOffset = 7;
+            widthOffset = 65;
+            heightOffset = -120;
 
             base.Initialize();
 
             //after base initialize so the texture is available in the constructor
-            texture = _frontTexture;
             Origin = new Vector2(
                     widthOffset,
-                    texture.Height - BaseTile.TileHeight
+                    texture.Height - BaseTile.TileHeight + heightOffset
                     );
         }
 
@@ -59,12 +48,22 @@ namespace project4
             //debug = new Texture2D(GraphicsDevice, 1, 1);
             //debug.SetData(new Color[] { Color.White });
 
-            _frontTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\front_view");
-            _backTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\back_view");
-            _leftTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\left_view");
-            _rightTexture = Game.Content.Load<Texture2D>(@"img\GameObjects\Cheese\right_view");
+            texture = Game.Content.Load<Texture2D>(@"img\GameObjects\rat");
 
             base.LoadContent();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            prevTime = currentTime;
+            currentTime = (int)Math.Floor(Game1.overallTime % 2);
+
+            if (currentTime != prevTime)
+            {
+                Move(direction, 0);                       
+            }
+
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime){
@@ -110,6 +109,5 @@ namespace project4
                 return (hoverBox.Contains(Game1.mousePos.X, Game1.mousePos.Y));
             }
         }
-
     }
 }
