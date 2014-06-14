@@ -94,6 +94,9 @@
     <Content Include="Content\audio\tune\tune1.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\img\GameObjects\ActionList\attackButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\img\GameObjects\ActionList\background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -173,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\audio\fx\" />
+    <Folder Include="Content\audio\voice\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

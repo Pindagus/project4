@@ -13,6 +13,7 @@ namespace project4
         public ScreenElement JumpButton;
         public ScreenElement TalkButton;
         public ScreenElement BridgeButton;
+        public ScreenElement AttackButton;
 
         public float posX;
 
@@ -40,6 +41,7 @@ namespace project4
                 //creates JumpButton
                 JumpButton = new ScreenElement(game, @"img\GameObjects\ActionList\jumpButton", new Vector2(posOutsideScreenX, listPosition.Y), 0.9f);
                 BridgeButton = new ScreenElement(game, @"img\GameObjects\ActionList\bridgeButton", new Vector2(posOutsideScreenX, listPosition.Y), 0.9f);
+                AttackButton = new ScreenElement(game, @"img\GameObjects\ActionList\attackButton", new Vector2(posOutsideScreenX, listPosition.Y), 0.9f);
             }
 
             if(interactor == "Bob"){

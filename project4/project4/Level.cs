@@ -135,7 +135,7 @@ namespace project4
                     _gameObjectList.Add(_bob);
                     _allObjects.Add(_bob);
 
-                    Computer _computer5 = new Computer(game, 5, 6, "Jump");
+                    Computer _computer5 = new Computer(game, 5, 6, "Attack");
                     _computerList.Add(_computer5);
                     _interactorList.Add(_computer5);
                     _gameObjectList.Add(_computer5);
@@ -230,11 +230,16 @@ namespace project4
                     if(computer.isSelected){
                         if (_cheese.IsClicked)
                         {
+                            correctActionWasChosen = false;
+
                             resetActionLists();
 
                             //cheese clicked after computer was selected
                             //set cheese as currentConsoleObject, because it has to be displayed in the console
                             _consoleInterface.currentObject = _cheese.ConsoleName;
+
+                            //reset console method
+                            _consoleInterface.currentMethod = "";
 
                             //set background of action list of cheese visible
                             _cheese.actionList.background._position.X = _cheese.ComputePos.X;
@@ -247,14 +252,23 @@ namespace project4
                             //set bridgebutton
                             _cheese.actionList.BridgeButton._position.X = _cheese.ComputePos.X;
                             _cheese.actionList.BridgeButton._position.Y = _cheese.ComputePos.Y + _cheese.actionList.BridgeButton._texture.Height + 10;
+
+                            //set attackbutton
+                            _cheese.actionList.AttackButton._position.X = _cheese.ComputePos.X;
+                            _cheese.actionList.AttackButton._position.Y = _cheese.ComputePos.Y + (_cheese.actionList.AttackButton._texture.Height + 10) * 2;
                         }
 
                         if(_bob.IsClicked){
+
+                            correctActionWasChosen = false;
 
                             resetActionLists();
 
                             //set bob as currentConsoleObject, because it has to be displayed in the console
                             _consoleInterface.currentObject = _bob.ConsoleName;
+
+                            //reset console method
+                            _consoleInterface.currentMethod = "";
 
                             //set background of action list of cheese visible
                             _bob.actionList.background._position.X = _bob.ComputePos.X;
@@ -268,25 +282,6 @@ namespace project4
                         //check if chosen action is the right one of that computer
 
                         //check buttons of cheese's action list
-                        if(_cheese.actionList.JumpButton.IsClicked){
-                        
-                            Console.WriteLine("JumpButton clicked");
-                            if(computer.Assignment == "Jump"){
-
-                                correctActionWasChosen = true;
-
-                                //set current method in console
-                                _consoleInterface.currentMethod = "Spring()";
-
-                                Console.WriteLine("Rigth action was chosen");
-                            }else{
-
-                                //TODO show the player that their answer was uncorrect
-
-                                Console.WriteLine("Rigth action was NOT chosen");
-                            }
-                        }
-
                         if (_cheese.actionList.BridgeButton.IsClicked)
                         {
 
@@ -335,6 +330,28 @@ namespace project4
                             }
                         }
 
+                        if (_cheese.actionList.AttackButton.IsClicked)
+                        {
+
+                            Console.WriteLine("Attack clicked");
+                            if (computer.Assignment == "Attack")
+                            {
+
+                                correctActionWasChosen = true;
+
+                                //set current method in console
+                                _consoleInterface.currentMethod = "ValAan()";
+
+                                Console.WriteLine("Rigth action was chosen");
+                            }
+                            else
+                            {
+
+                                //TODO show the player that their answer was uncorrect
+
+                                Console.WriteLine("Rigth action was NOT chosen");
+                            }
+                        }
 
 
                         //assignment passed if runbutton is clicked and if right action was chosen
@@ -358,9 +375,14 @@ namespace project4
                                     levelMap.Rows[5].Columns[6] = new Stone();
                                     levelMap.Rows[6].Columns[6] = new Stone();
                                 }
+/////
+                                if (computer.Assignment == "Attack")
+                                {
+                                    //set rat outside screen so it is unvisible
+                                    _rat1.TileX = 20;
+                                }
 
                                 correctActionWasChosen = false;
-                                Console.WriteLine("Console Runbutton was clicked and chose action was right");
                             }
                             else
                             {
@@ -383,7 +405,6 @@ namespace project4
                         )
                     {
                         disableSelection(computer);
-
                         resetProgrammingTools();
                     }
                 }
@@ -413,7 +434,9 @@ namespace project4
 
             foreach(Rat rat in _ratList){
                 if(_cheese.boundingBox.Intersects(rat.boundingBox)){
-                
+///
+                    Console.WriteLine("collide with rat");
+
                     //respawn cheese to its starting tile
                     _cheese.TileX = _cheese.startingTileX;
                     _cheese.TileY = _cheese.startingTileY;
@@ -483,11 +506,10 @@ namespace project4
             _cheese.actionList.background._position.X = ActionList.posOutsideScreenX;
             _bob.actionList.background._position.X = ActionList.posOutsideScreenX;
 
-            //set jumpbutton
+            //set button position ouside of screen
             _cheese.actionList.JumpButton._position.X = ActionList.posOutsideScreenX;
-
-            //set bridgebutton
             _cheese.actionList.BridgeButton._position.X = ActionList.posOutsideScreenX;
+            _cheese.actionList.AttackButton._position.X = ActionList.posOutsideScreenX;
 
             //set TalkButton outside screen
             _bob.actionList.TalkButton._position.X = ActionList.posOutsideScreenX;
