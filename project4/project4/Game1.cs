@@ -68,7 +68,7 @@ namespace project4
             //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             //
 
             _player = new Player(this);
@@ -173,7 +173,7 @@ namespace project4
                         if (DEBUG2)
                         {
                             //start level 2 immediately
-                            _currentLevel = new Level(this, _player, 3, 6, 1);
+                            _currentLevel = new Level(this, _player, 2, 6, 1);
                         }
                         else
                         {

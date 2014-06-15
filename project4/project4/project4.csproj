@@ -58,6 +58,7 @@
     <Compile Include="Map\Tiles\Stone.cs" />
     <Compile Include="Map\Tiles\Water.cs" />
     <Compile Include="Map\Tiles\Wood.cs" />
+    <Compile Include="MarketStall.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -182,6 +183,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\img\GameObjects\diamond.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\img\GameObjects\market.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\img\GameObjects\rat.png">

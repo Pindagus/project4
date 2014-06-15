@@ -42,6 +42,7 @@ namespace project4
         private bool bobHasAlreadyTalked;
         private bool computerIsAlreadyClicked;
         private bool cheeseHasAlreadyTalkebAboutRat;
+        private MarketStall _marketStall;
 
         public Level(Game game, Player player, int currentLevel, int cheeseX, int cheeseY)
             : base(game)
@@ -99,6 +100,10 @@ namespace project4
 
                     _diamond = new Diamond(game, 7, 8);
                     _allObjects.Add(_diamond);
+
+                    _marketStall = new MarketStall(game, 6, 3);
+                    _gameObjectList.Add(_marketStall);
+                    _allObjects.Add(_marketStall);
 
                     //sets accessibility of tiles where gameObjects are standing on to false
                     foreach (GameObject gameObject in _gameObjectList){
@@ -176,6 +181,11 @@ namespace project4
 
         private void setAccessibility(GameObject gameObject){
             levelMap.Rows[gameObject.TileY].Columns[gameObject.TileX].accessible = false;
+
+            if (gameObject == _marketStall)
+            {
+                levelMap.Rows[gameObject.TileY].Columns[gameObject.TileX + 1].accessible = false;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -238,266 +248,284 @@ namespace project4
                         _player._currentMouseTexture = _player._mouseCursorTexture;
                     }
                 }
-            }    
-   
-            //TODO set selection tiles darker when entering them
-        
-            //loop through computerlist
-            foreach(Computer computer in _computerList){
+            }           
+                //loop through computerlist
+                foreach(Computer computer in _computerList){
 
-                setComputerSelectionTile(computer);
-
-                //computer assignment cannot be done 2 times if player has passed computer's assignment
-                if(!computer.assignmentPassed){
-
-                    if(computer.IsClicked && ComputerSelectionRange(computer)){
-                        computer.isSelected = true;
-                        _cheese.MovingAllowed = false;                    
-
-                        //set console and runbutton visible
-                        _consoleInterface.console._position.X = (float)_consoleInterface.visiblePosX;
-                        _consoleInterface.RunButton._position.X = (float)_consoleInterface.visiblePosX;
-
-                        Console.WriteLine("Computer was clicked");
-                    }
-
-                    if(computer.isSelected){
-
-                        if(_currentLevelInt == 1 && !computerIsAlreadyClicked){
-                            Game1.klik_op_bob.Play();
-                            computerIsAlreadyClicked = true;
-                        }
-
-                        if (_currentLevelInt == 2 && !computerIsAlreadyClicked)
-                        {
-                            Game1.klik_karakter.Play();
-                            computerIsAlreadyClicked = true;
-                        }
-
-                        if (_currentLevelInt == 3 && !computerIsAlreadyClicked)
-                        {
-                            Game1.klik_karakter.Play();
-                            computerIsAlreadyClicked = true;
-                        }
+                    setComputerSelectionTile(computer);
 
 
-                        if (_cheese.IsClicked)
-                        {
-//////
-                            //for audio
-                            if(computer.Assignment != "Talk"){
-                                Game1.wat_doen.Play();                   
+                    //bobs speech will also be present in this group below
+                    if (
+                        Game1.klik_op_pc_bob.State != SoundState.Playing
+                        && Game1.klik_op_bob.State != SoundState.Playing
+                        && Game1.actie_bob.State != SoundState.Playing
+                        && Game1.klik_karakter.State != SoundState.Playing
+                        && Game1.wat_doen.State != SoundState.Playing
+                        && Game1.verkeerde_actie.State != SoundState.Playing
+                        && Game1.verkeerde_persoon.State != SoundState.Playing
+                        )
+                    { 
+
+                        //computer assignment cannot be done 2 times if player has passed computer's assignment
+                        if(!computer.assignmentPassed){
+
+                            if(computer.IsClicked && ComputerSelectionRange(computer)){
+                                computer.isSelected = true;
+                                _cheese.MovingAllowed = false;                    
+
+                                //set console and runbutton visible
+                                _consoleInterface.console._position.X = (float)_consoleInterface.visiblePosX;
+                                _consoleInterface.RunButton._position.X = (float)_consoleInterface.visiblePosX;
+
+                                Console.WriteLine("Computer was clicked");
                             }
 
-                            correctActionWasChosen = false;
+                            if(computer.isSelected){
 
-                            resetActionLists();
-
-                            //cheese clicked after computer was selected
-                            //set cheese as currentConsoleObject, because it has to be displayed in the console
-                            _consoleInterface.currentObject = _cheese.ConsoleName;
-
-                            //reset console method
-                            _consoleInterface.currentMethod = "";
-
-                            //set background of action list of cheese visible
-                            _cheese.actionList.background._position.X = _cheese.ComputePos.X;
-                            _cheese.actionList.background._position.Y = _cheese.ComputePos.Y;
-
-                            //set jumpbutton
-                            _cheese.actionList.JumpButton._position.X = _cheese.ComputePos.X;
-                            _cheese.actionList.JumpButton._position.Y = _cheese.ComputePos.Y;
-
-                            //set bridgebutton
-                            _cheese.actionList.BridgeButton._position.X = _cheese.ComputePos.X;
-                            _cheese.actionList.BridgeButton._position.Y = _cheese.ComputePos.Y + _cheese.actionList.BridgeButton._texture.Height + 10;
-
-                            //set attackbutton
-                            _cheese.actionList.AttackButton._position.X = _cheese.ComputePos.X;
-                            _cheese.actionList.AttackButton._position.Y = _cheese.ComputePos.Y + (_cheese.actionList.AttackButton._texture.Height + 10) * 2;
-                        }
-
-                        if(_bob.IsClicked){
-
-                            //for audio
-                            if (computer.Assignment != "Talk")
-                            {
-                                Game1.verkeerde_persoon.Play();
-                            }
-
-                            if (_currentLevelInt == 1)
-                            {
-                                Game1.actie_bob.Play();
-                            }
-
-                            correctActionWasChosen = false;
-
-                            resetActionLists();
-
-                            //set bob as currentConsoleObject, because it has to be displayed in the console
-                            _consoleInterface.currentObject = _bob.ConsoleName;
-
-                            //reset console method
-                            _consoleInterface.currentMethod = "";
-
-                            //set background of action list of cheese visible
-                            _bob.actionList.background._position.X = _bob.ComputePos.X;
-                            _bob.actionList.background._position.Y = _bob.ComputePos.Y;
-
-                            //set talkbutton
-                            _bob.actionList.TalkButton._position.X = _bob.ComputePos.X;
-                            _bob.actionList.TalkButton._position.Y = _bob.ComputePos.Y;
-                        }
-
-                        //check if chosen action is the right one of that computer
-
-                        //check buttons of cheese's action list
-                        if (_cheese.actionList.BridgeButton.IsClicked)
-                        {
-
-                            Console.WriteLine("BridgeButton clicked");
-                            if (computer.Assignment == "Bridge")
-                            {
-
-                                correctActionWasChosen = true;
-
-                                //set current method in console
-                                _consoleInterface.currentMethod = "BouwBrug()";
-
-                                Console.WriteLine("Rigth action was chosen");
-                            }
-                            else
-                            {
-                                correctActionWasChosen = false;
-                                _consoleInterface.currentMethod = "BouwBrug()";
-
-                                Console.WriteLine("Rigth action was NOT chosen");
-                            }
-                        }
-
-
-                        //check buttons of cheese's action list
-                        if (_bob.actionList.TalkButton.IsClicked)
-                        {
-
-                            Console.WriteLine("TalkButton clicked");
-                            if (computer.Assignment == "Talk")
-                            {
-
-                                correctActionWasChosen = true;
-
-                                //set current method in console
-                                _consoleInterface.currentMethod = "Praat()";
-
-                                Console.WriteLine("Rigth action was chosen");
-                            }
-                            else
-                            {
-
-                                //TODO show the player that their answer was uncorrect
-
-                                correctActionWasChosen = false;
-                                _consoleInterface.currentMethod = "Praat()";
-
-                                Console.WriteLine("Rigth action was NOT chosen");
-                            }
-                        }
-
-                        if (_cheese.actionList.AttackButton.IsClicked)
-                        {
-
-                            Console.WriteLine("Attack clicked");
-                            if (computer.Assignment == "Attack")
-                            {
-
-                                correctActionWasChosen = true;
-
-                                //set current method in console
-                                _consoleInterface.currentMethod = "ValAan()";
-
-                                Console.WriteLine("Rigth action was chosen");
-                            }
-                            else
-                            {
-                                //TODO show the player that their answer was uncorrect
-
-                                correctActionWasChosen = false;
-                                _consoleInterface.currentMethod = "ValAan()";
-
-                                Console.WriteLine("Rigth action was NOT chosen");
-                            }
-                        }
-
-
-                        //assignment passed if runbutton is clicked and if right action was chosen
-                        if (_consoleInterface.RunButton.IsClicked)
-                        {
-                            if (correctActionWasChosen)
-                            {                
-                                computer.assignmentPassed = true;
-
-                                disableSelection(computer);
-
-                                resetProgrammingTools();
-
-                                if(computer.Assignment == "Talk"){
-                                    //play audio
+                                if(_currentLevelInt == 1 && !computerIsAlreadyClicked){
+                                    Game1.klik_op_bob.Play();
+                                    computerIsAlreadyClicked = true;
                                 }
 
-                                if(computer.Assignment == "Bridge"){
-
-                                    //for audio
-                                    Game1.brug_klaar.Play();
-
-                                    //set bridge
-                                    levelMap.Rows[5].Columns[6] = new Stone();
-                                    levelMap.Rows[6].Columns[6] = new Stone();
+                                if (_currentLevelInt == 2 && !computerIsAlreadyClicked)
+                                {
+                                    Game1.klik_karakter.Play();
+                                    computerIsAlreadyClicked = true;
                                 }
 
-                                if (computer.Assignment == "Attack")
+                                if (_currentLevelInt == 3 && !computerIsAlreadyClicked)
+                                {
+                                    Game1.klik_karakter.Play();
+                                    computerIsAlreadyClicked = true;
+                                }
+
+
+                                if (_cheese.IsClicked)
                                 {
                                     //for audio
-                                    Game1.rat_defeated.Play();
+                                    if (computer.Assignment == "Talk"){
+                                        Game1.verkeerde_persoon.Play();            
+                                    }
 
-                                    //set rat outside screen so it is unvisible
-                                    _rat1.TileX = 20;
+                                    //for audio
+                                    if(computer.Assignment != "Talk"){
+                                        Game1.wat_doen.Play();                   
+                                    }
+
+                                    correctActionWasChosen = false;
+
+                                    resetActionLists();
+
+                                    //cheese clicked after computer was selected
+                                    //set cheese as currentConsoleObject, because it has to be displayed in the console
+                                    _consoleInterface.currentObject = _cheese.ConsoleName;
+
+                                    //reset console method
+                                    _consoleInterface.currentMethod = "";
+
+                                    //set background of action list of cheese visible
+                                    _cheese.actionList.background._position.X = _cheese.ComputePos.X;
+                                    _cheese.actionList.background._position.Y = _cheese.ComputePos.Y;
+
+                                    //set jumpbutton
+                                    _cheese.actionList.JumpButton._position.X = _cheese.ComputePos.X;
+                                    _cheese.actionList.JumpButton._position.Y = _cheese.ComputePos.Y;
+
+                                    //set bridgebutton
+                                    _cheese.actionList.BridgeButton._position.X = _cheese.ComputePos.X;
+                                    _cheese.actionList.BridgeButton._position.Y = _cheese.ComputePos.Y + _cheese.actionList.BridgeButton._texture.Height + 10;
+
+                                    //set attackbutton
+                                    _cheese.actionList.AttackButton._position.X = _cheese.ComputePos.X;
+                                    _cheese.actionList.AttackButton._position.Y = _cheese.ComputePos.Y + (_cheese.actionList.AttackButton._texture.Height + 10) * 2;
                                 }
 
-                                correctActionWasChosen = false;
-                            }
-                            else
-                            {
-                                //for audio
-                                Game1.verkeerde_actie.Play();
+                                if(_bob.IsClicked){
 
-                                Console.WriteLine("This answer is uncorrect");
+                                    //for audio
+                                    if (computer.Assignment != "Talk")
+                                    {
+                                        Game1.verkeerde_persoon.Play();
+                                    }
+
+                                    if (_currentLevelInt == 1)
+                                    {
+                                        Game1.actie_bob.Play();
+                                    }
+
+                                    correctActionWasChosen = false;
+
+                                    resetActionLists();
+
+                                    //set bob as currentConsoleObject, because it has to be displayed in the console
+                                    _consoleInterface.currentObject = _bob.ConsoleName;
+
+                                    //reset console method
+                                    _consoleInterface.currentMethod = "";
+
+                                    //set background of action list of cheese visible
+                                    _bob.actionList.background._position.X = _bob.ComputePos.X;
+                                    _bob.actionList.background._position.Y = _bob.ComputePos.Y;
+
+                                    //set talkbutton
+                                    _bob.actionList.TalkButton._position.X = _bob.ComputePos.X;
+                                    _bob.actionList.TalkButton._position.Y = _bob.ComputePos.Y;
+                                }
+
+                                //check if chosen action is the right one of that computer
+
+                                //check buttons of cheese's action list
+                                if (_cheese.actionList.BridgeButton.IsClicked)
+                                {
+
+                                    Console.WriteLine("BridgeButton clicked");
+                                    if (computer.Assignment == "Bridge")
+                                    {
+
+                                        correctActionWasChosen = true;
+
+                                        //set current method in console
+                                        _consoleInterface.currentMethod = "BouwBrug()";
+
+                                        Console.WriteLine("Rigth action was chosen");
+                                    }
+                                    else
+                                    {
+                                        correctActionWasChosen = false;
+                                        _consoleInterface.currentMethod = "BouwBrug()";
+
+                                        Console.WriteLine("Rigth action was NOT chosen");
+                                    }
+                                }
+
+
+                                //check buttons of cheese's action list
+                                if (_bob.actionList.TalkButton.IsClicked)
+                                {
+
+                                    Console.WriteLine("TalkButton clicked");
+                                    if (computer.Assignment == "Talk")
+                                    {
+
+                                        correctActionWasChosen = true;
+
+                                        //set current method in console
+                                        _consoleInterface.currentMethod = "Praat()";
+
+                                        Console.WriteLine("Rigth action was chosen");
+                                    }
+                                    else
+                                    {
+
+                                        //TODO show the player that their answer was uncorrect
+
+                                        correctActionWasChosen = false;
+                                        _consoleInterface.currentMethod = "Praat()";
+
+                                        Console.WriteLine("Rigth action was NOT chosen");
+                                    }
+                                }
+
+                                if (_cheese.actionList.AttackButton.IsClicked)
+                                {
+
+                                    Console.WriteLine("Attack clicked");
+                                    if (computer.Assignment == "Attack")
+                                    {
+
+                                        correctActionWasChosen = true;
+
+                                        //set current method in console
+                                        _consoleInterface.currentMethod = "ValAan()";
+
+                                        Console.WriteLine("Rigth action was chosen");
+                                    }
+                                    else
+                                    {
+                                        //TODO show the player that their answer was uncorrect
+
+                                        correctActionWasChosen = false;
+                                        _consoleInterface.currentMethod = "ValAan()";
+
+                                        Console.WriteLine("Rigth action was NOT chosen");
+                                    }
+                                }
+
+
+                                //assignment passed if runbutton is clicked and if right action was chosen
+                                if (_consoleInterface.RunButton.IsClicked)
+                                {
+                                    if (correctActionWasChosen)
+                                    {                
+                                        computer.assignmentPassed = true;
+
+                                        disableSelection(computer);
+
+                                        resetProgrammingTools();
+
+                                        if(computer.Assignment == "Talk"){
+                                            //play audio
+                                        }
+
+                                        if(computer.Assignment == "Bridge"){
+
+                                            //for audio
+                                            Game1.brug_klaar.Play();
+
+                                            //set bridge
+                                            levelMap.Rows[5].Columns[6] = new Stone();
+                                            levelMap.Rows[6].Columns[6] = new Stone();
+                                        }
+
+                                        if (computer.Assignment == "Attack")
+                                        {
+                                            //for audio
+                                            Game1.rat_defeated.Play();
+
+                                            //set rat outside screen so it is unvisible
+                                            _rat1.TileX = 20;
+                                            _rat2.TileX = 20;
+                                        }
+
+                                        correctActionWasChosen = false;
+                                    }
+                                    else
+                                    {
+                                        //for audio
+                                        Game1.verkeerde_actie.Play();
+
+                                        Console.WriteLine("This answer is uncorrect");
+                                    }
+                                }
+                            }
+
+                            //disable computer blinking selection after clicking next to computer 
+                            //and next to the console with its runbutton, 
+                            //don't disable if interactor was clicked
+                            //don't disable if cheese's actionlist was clicked
+                            // and if bob's actionlist was clicked
+                            if (Game1._previousMouseState.LeftButton == ButtonState.Released && Game1._currentMouseState.LeftButton == ButtonState.Pressed && !computer.IsClicked && computer.isSelected
+                                && !_consoleInterface.RunButton.IsClicked
+                                && !_consoleInterface.console.IsClicked
+                                && !oneOfInteractorsIsClicked
+                                && !_cheese.actionList.background.IsClicked
+                                && !_bob.actionList.background.IsClicked
+                                )
+                            {
+                                disableSelection(computer);
+                                resetProgrammingTools();
                             }
                         }
+                        else
+                        {
+                            computer.selectionTransparency = 1;
+                        }
+
                     }
 
-                    //disable computer blinking selection after clicking next to computer 
-                    //and next to the console with its runbutton, 
-                    //don't disable if interactor was clicked
-                    //don't disable if cheese's actionlist was clicked
-                    // and if bob's actionlist was clicked
-                    if (Game1._previousMouseState.LeftButton == ButtonState.Released && Game1._currentMouseState.LeftButton == ButtonState.Pressed && !computer.IsClicked && computer.isSelected
-                        && !_consoleInterface.RunButton.IsClicked
-                        && !_consoleInterface.console.IsClicked
-                        && !oneOfInteractorsIsClicked
-                        && !_cheese.actionList.background.IsClicked
-                        && !_bob.actionList.background.IsClicked
-                        )
-                    {
-                        disableSelection(computer);
-                        resetProgrammingTools();
-                    }
                 }
-                else
-                {
-                    computer.selectionTransparency = 1;
-                }
-            }
-
+/////
             //check if player has grabbed diamond, set true if all computer assignments are passed also
             if (_cheese.boundingBox.Intersects(_diamond.boundingBox))
             {

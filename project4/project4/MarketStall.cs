@@ -7,17 +7,15 @@ using System.Text;
 
 namespace project4
 {
-    class Diamond : GameObject
+    class MarketStall : GameObject
     {
-        //private Texture2D debug;
-
-        public Diamond(Game game, int X, int Y)
+        public MarketStall(Game game, int X, int Y)
             : base(game)
         {
             TileX = X;
             TileY = Y;
 
-            layerDepth = ComputeDepth -0.01;
+            layerDepth = ComputeDepth;
 
             scale = 1;
 
@@ -35,7 +33,7 @@ namespace project4
             //debug = new Texture2D(GraphicsDevice, 1, 1);
             //debug.SetData(new Color[] { Color.White });
 
-            texture = Game.Content.Load<Texture2D>(@"img\GameObjects\diamond");
+            texture = Game.Content.Load<Texture2D>(@"img\GameObjects\market");
 
             base.LoadContent();
         }
