@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -38,6 +39,9 @@ namespace project4
         private Bob _bob;
         private Rat _rat1;
         private Rat _rat2;
+        private bool bobHasAlreadyTalked;
+        private bool computerIsAlreadyClicked;
+        private bool cheeseHasAlreadyTalkebAboutRat;
 
         public Level(Game game, Player player, int currentLevel, int cheeseX, int cheeseY)
             : base(game)
@@ -55,6 +59,7 @@ namespace project4
             _allObjects.Add(_cheese);
 
             _currentLevelInt = currentLevel;
+
             setLevel(game); //based on int _currentLevelInt
         }
 
@@ -65,6 +70,8 @@ namespace project4
                 //each level must have at least one computer and one diamond
 
                 case 1:
+                    Game1.begin_level1.Play();
+
                     levelMap = new FirstLevelMap(game);
 
                     //set console, starting position is outside screen thus unvisible
@@ -100,6 +107,8 @@ namespace project4
 
                     break;
                 case 2:
+                    Game1.begin_level2.Play();
+
                     levelMap = new LevelMap2(game);
 
                     _consoleInterface = new ConsoleInterface(game);
@@ -126,6 +135,8 @@ namespace project4
 
                     break;
                 case 3:
+                    Game1.begin_level3.Play();
+
                     levelMap = new LastLevelMap(game);
 
                     _consoleInterface = new ConsoleInterface(game);
@@ -169,11 +180,34 @@ namespace project4
 
         public override void Update(GameTime gameTime)
         {
-            //levels checks if next tile is accessible for cheese
-            checkAccessibilityVertical(Keys.Up, ref _cheese.TileY, -1);
-            checkAccessibilityVertical(Keys.Down, ref _cheese.TileY, +1);
-            checkAccessibilityHorizontal(Keys.Left, ref _cheese.TileX, -1);
-            checkAccessibilityHorizontal(Keys.Right, ref _cheese.TileX, +1);
+            //for audio
+            if (bobSelectionRange() && !bobHasAlreadyTalked && _currentLevelInt == 1){
+                Game1.klik_op_pc_bob.Play();
+                bobHasAlreadyTalked = true;
+            }
+
+            //for audio
+            if (_currentLevelInt == 3) { 
+                if (ratSelectionRange() && !cheeseHasAlreadyTalkebAboutRat){
+                    Game1.rat_attack.Play();
+                    cheeseHasAlreadyTalkebAboutRat = true;
+                }
+            }
+
+            if (Game1.begin_level1.State != SoundState.Playing
+                && Game1.klik_op_pc_bob.State != SoundState.Playing
+                && Game1.begin_level2.State != SoundState.Playing
+                && Game1.brug_klaar.State != SoundState.Playing
+                && Game1.begin_level3.State != SoundState.Playing
+                && Game1.rat_attack.State != SoundState.Playing
+                && Game1.rat_defeated.State != SoundState.Playing
+                ){
+                //levels checks if next tile is accessible for cheese
+                checkAccessibilityVertical(Keys.Up, ref _cheese.TileY, -1);
+                checkAccessibilityVertical(Keys.Down, ref _cheese.TileY, +1);
+                checkAccessibilityHorizontal(Keys.Left, ref _cheese.TileX, -1);
+                checkAccessibilityHorizontal(Keys.Right, ref _cheese.TileX, +1);
+            }
 
             //if boolean isnt used then the last in the list will override de pointer, this isn't the wanted effect
             bool hovering = false;
@@ -228,8 +262,33 @@ namespace project4
                     }
 
                     if(computer.isSelected){
+
+                        if(_currentLevelInt == 1 && !computerIsAlreadyClicked){
+                            Game1.klik_op_bob.Play();
+                            computerIsAlreadyClicked = true;
+                        }
+
+                        if (_currentLevelInt == 2 && !computerIsAlreadyClicked)
+                        {
+                            Game1.klik_karakter.Play();
+                            computerIsAlreadyClicked = true;
+                        }
+
+                        if (_currentLevelInt == 3 && !computerIsAlreadyClicked)
+                        {
+                            Game1.klik_karakter.Play();
+                            computerIsAlreadyClicked = true;
+                        }
+
+
                         if (_cheese.IsClicked)
                         {
+//////
+                            //for audio
+                            if(computer.Assignment != "Talk"){
+                                Game1.wat_doen.Play();                   
+                            }
+
                             correctActionWasChosen = false;
 
                             resetActionLists();
@@ -259,6 +318,17 @@ namespace project4
                         }
 
                         if(_bob.IsClicked){
+
+                            //for audio
+                            if (computer.Assignment != "Talk")
+                            {
+                                Game1.verkeerde_persoon.Play();
+                            }
+
+                            if (_currentLevelInt == 1)
+                            {
+                                Game1.actie_bob.Play();
+                            }
 
                             correctActionWasChosen = false;
 
@@ -298,8 +368,8 @@ namespace project4
                             }
                             else
                             {
-
-                                //TODO show the player that their answer was uncorrect
+                                correctActionWasChosen = false;
+                                _consoleInterface.currentMethod = "BouwBrug()";
 
                                 Console.WriteLine("Rigth action was NOT chosen");
                             }
@@ -326,6 +396,9 @@ namespace project4
 
                                 //TODO show the player that their answer was uncorrect
 
+                                correctActionWasChosen = false;
+                                _consoleInterface.currentMethod = "Praat()";
+
                                 Console.WriteLine("Rigth action was NOT chosen");
                             }
                         }
@@ -346,8 +419,10 @@ namespace project4
                             }
                             else
                             {
-
                                 //TODO show the player that their answer was uncorrect
+
+                                correctActionWasChosen = false;
+                                _consoleInterface.currentMethod = "ValAan()";
 
                                 Console.WriteLine("Rigth action was NOT chosen");
                             }
@@ -371,13 +446,19 @@ namespace project4
 
                                 if(computer.Assignment == "Bridge"){
 
+                                    //for audio
+                                    Game1.brug_klaar.Play();
+
                                     //set bridge
                                     levelMap.Rows[5].Columns[6] = new Stone();
                                     levelMap.Rows[6].Columns[6] = new Stone();
                                 }
-/////
+
                                 if (computer.Assignment == "Attack")
                                 {
+                                    //for audio
+                                    Game1.rat_defeated.Play();
+
                                     //set rat outside screen so it is unvisible
                                     _rat1.TileX = 20;
                                 }
@@ -386,6 +467,9 @@ namespace project4
                             }
                             else
                             {
+                                //for audio
+                                Game1.verkeerde_actie.Play();
+
                                 Console.WriteLine("This answer is uncorrect");
                             }
                         }
@@ -455,6 +539,9 @@ namespace project4
 
         public void disableSelection(Computer computer)
         {
+            //for audio
+            computerIsAlreadyClicked = false;
+
             _cheese.MovingAllowed = true;
             computer.isSelected = false;
             computer.selectionTransparency = computer.blingTransparency;
@@ -478,6 +565,39 @@ namespace project4
                 computer.TileX == _cheese.TileX && computer.TileY + 1 == _cheese.TileY ||
                 computer.TileX + 1 == _cheese.TileX && computer.TileY + 1 == _cheese.TileY
                 )
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool bobSelectionRange(){
+            if (
+                //row 1
+                _bob.TileX - 1 == _cheese.TileX && _bob.TileY - 1 == _cheese.TileY ||
+                _bob.TileX == _cheese.TileX && _bob.TileY - 1 == _cheese.TileY ||
+                _bob.TileX + 1 == _cheese.TileX && _bob.TileY - 1 == _cheese.TileY ||
+
+                //row2
+                _bob.TileX - 1 == _cheese.TileX && _bob.TileY == _cheese.TileY ||
+                _bob.TileX + 1 == _cheese.TileX && _bob.TileY == _cheese.TileY ||
+
+                //row3
+                _bob.TileX - 1 == _cheese.TileX && _bob.TileY + 1 == _cheese.TileY ||
+                _bob.TileX == _cheese.TileX && _bob.TileY + 1 == _cheese.TileY ||
+                _bob.TileX + 1 == _cheese.TileX && _bob.TileY + 1 == _cheese.TileY
+                )
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool ratSelectionRange()
+        {
+            if (
+                _rat2.TileY - 1 == _cheese.TileY
+                )                
             {
                 return true;
             }
