@@ -9,7 +9,6 @@ namespace project4
 {
     class Tree : GameObject
     {
-        //private Texture2D debug;
 
         public Tree(Game game, int X, int Y)
             : base(game)
@@ -17,7 +16,7 @@ namespace project4
             TileX = X;
             TileY = Y;
 
-            layerDepth = ComputeDepth - 0.01;
+            layerDepth = ComputeDepth;
 
             scale = 1;
 
@@ -35,7 +34,7 @@ namespace project4
             //debug = new Texture2D(GraphicsDevice, 1, 1);
             //debug.SetData(new Color[] { Color.White });
 
-            texture = Game.Content.Load<Texture2D>(@"img\GameObjects\tree");
+            texture = Game.Content.Load<Texture2D>(@"img\GameObjects\tree_tall");
 
             base.LoadContent();
         }
@@ -52,7 +51,5 @@ namespace project4
 
             base.Draw(gameTime);
         }
-
-
     }
 }

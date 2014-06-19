@@ -15,7 +15,7 @@ namespace project4
         private TileMap levelMap;
         private Player _player;
         private Cheese _cheese;
-        public bool diamondIsTaken;
+        public bool diamondIsTaken = false;
         private Diamond _diamond;
         private ConsoleInterface _consoleInterface;
 
@@ -71,9 +71,10 @@ namespace project4
                 //each level must have at least one computer and one diamond
 
                 case 1:
-                    Game1.begin_level1.Play();
-
                     levelMap = new FirstLevelMap(game);
+                    setTrees(game);
+
+                    Game1.begin_level1.Play();
 
                     //set console, starting position is outside screen thus unvisible
                     _consoleInterface = new ConsoleInterface(game);
@@ -112,9 +113,10 @@ namespace project4
 
                     break;
                 case 2:
-                    Game1.begin_level2.Play();
-
                     levelMap = new LevelMap2(game);
+                    setTrees(game);
+
+                    Game1.begin_level2.Play();
 
                     _consoleInterface = new ConsoleInterface(game);
 
@@ -140,9 +142,10 @@ namespace project4
 
                     break;
                 case 3:
-                    Game1.begin_level3.Play();
-
                     levelMap = new LastLevelMap(game);
+                    setTrees(game);
+
+                    Game1.begin_level3.Play();
 
                     _consoleInterface = new ConsoleInterface(game);
 
@@ -179,6 +182,22 @@ namespace project4
             }
         }
 
+        private void setTrees(Game game)
+        {
+            for (int i = 0; i < levelMap.Rows.Count - 1; i++)
+            {
+                for (int j = 0; j < levelMap.Rows[j].Columns.Count - 1; j++)
+                {
+                    if (levelMap.Rows[i].Columns[j] is Brown)
+                    {
+                        GameObject tree = new Tree(game, j, i);
+                        _allObjects.Add(tree);
+                    }
+                }
+
+            } 
+        }
+
         private void setAccessibility(GameObject gameObject){
             levelMap.Rows[gameObject.TileY].Columns[gameObject.TileX].accessible = false;
 
@@ -204,6 +223,17 @@ namespace project4
                 }
             }
 
+            //stop walking fx when not pressing any key
+            if (
+                Game1._currentKeyboardState.IsKeyUp(Keys.Up) 
+                && Game1._currentKeyboardState.IsKeyUp(Keys.Down)
+                && Game1._currentKeyboardState.IsKeyUp(Keys.Left)
+                && Game1._currentKeyboardState.IsKeyUp(Keys.Right)
+                )
+            {
+                Game1.walk.Stop();
+            }
+
             if (Game1.begin_level1.State != SoundState.Playing
                 && Game1.klik_op_pc_bob.State != SoundState.Playing
                 && Game1.begin_level2.State != SoundState.Playing
@@ -211,6 +241,7 @@ namespace project4
                 && Game1.begin_level3.State != SoundState.Playing
                 && Game1.rat_attack.State != SoundState.Playing
                 && Game1.rat_defeated.State != SoundState.Playing
+                && Game1.bob_praat.State != SoundState.Playing
                 ){
                 //levels checks if next tile is accessible for cheese
                 checkAccessibilityVertical(Keys.Up, ref _cheese.TileY, -1);
@@ -271,6 +302,10 @@ namespace project4
                         if(!computer.assignmentPassed){
 
                             if(computer.IsClicked && ComputerSelectionRange(computer)){
+
+                                //play select sound fx
+                                Game1.buttonSelect.Play();
+
                                 computer.isSelected = true;
                                 _cheese.MovingAllowed = false;                    
 
@@ -303,6 +338,9 @@ namespace project4
 
                                 if (_cheese.IsClicked)
                                 {
+                                    //button select fx
+                                    Game1.buttonSelect.Play();
+
                                     //for audio
                                     if (computer.Assignment == "Talk"){
                                         Game1.verkeerde_persoon.Play();            
@@ -343,6 +381,9 @@ namespace project4
 
                                 if(_bob.IsClicked){
 
+                                    //button select fx
+                                    Game1.buttonSelect.Play();
+
                                     //for audio
                                     if (computer.Assignment != "Talk")
                                     {
@@ -378,8 +419,9 @@ namespace project4
                                 //check buttons of cheese's action list
                                 if (_cheese.actionList.BridgeButton.IsClicked)
                                 {
+                                    //button select fx
+                                    Game1.buttonSelect.Play();
 
-                                    Console.WriteLine("BridgeButton clicked");
                                     if (computer.Assignment == "Bridge")
                                     {
 
@@ -399,10 +441,35 @@ namespace project4
                                     }
                                 }
 
+                                if (_cheese.actionList.JumpButton.IsClicked)
+                                {
+                                    //button select fx
+                                    Game1.buttonSelect.Play();
+
+                                    if (computer.Assignment == "Jump")
+                                    {
+
+                                        correctActionWasChosen = true;
+
+                                        //set current method in console
+                                        _consoleInterface.currentMethod = "Spring()";
+
+                                        Console.WriteLine("Rigth action was chosen");
+                                    }
+                                    else
+                                    {
+                                        correctActionWasChosen = false;
+                                        _consoleInterface.currentMethod = "Spring()";
+
+                                        Console.WriteLine("Rigth action was NOT chosen");
+                                    }
+                                }
 
                                 //check buttons of cheese's action list
                                 if (_bob.actionList.TalkButton.IsClicked)
                                 {
+                                    //button select fx
+                                    Game1.buttonSelect.Play();
 
                                     Console.WriteLine("TalkButton clicked");
                                     if (computer.Assignment == "Talk")
@@ -429,8 +496,9 @@ namespace project4
 
                                 if (_cheese.actionList.AttackButton.IsClicked)
                                 {
+                                    //button select fx
+                                    Game1.buttonSelect.Play();
 
-                                    Console.WriteLine("Attack clicked");
                                     if (computer.Assignment == "Attack")
                                     {
 
@@ -457,7 +525,10 @@ namespace project4
                                 if (_consoleInterface.RunButton.IsClicked)
                                 {
                                     if (correctActionWasChosen)
-                                    {                
+                                    {         
+                                        //play correct fx
+                                        Game1.assignmentCorrect.Play();
+
                                         computer.assignmentPassed = true;
 
                                         disableSelection(computer);
@@ -466,6 +537,7 @@ namespace project4
 
                                         if(computer.Assignment == "Talk"){
                                             //play audio
+                                            Game1.bob_praat.Play();
                                         }
 
                                         if(computer.Assignment == "Bridge"){
@@ -486,12 +558,16 @@ namespace project4
                                             //set rat outside screen so it is unvisible
                                             _rat1.TileX = 20;
                                             _rat2.TileX = 20;
+                                            _rat2.MovingAllowed = false;
                                         }
 
                                         correctActionWasChosen = false;
                                     }
                                     else
                                     {
+                                        //incorrect fx
+                                        Game1.assignmentIncorrect.Play();
+
                                         //for audio
                                         Game1.verkeerde_actie.Play();
 
@@ -540,14 +616,17 @@ namespace project4
                 }
 
                 if (AllComputerAssignmentsPassed){
+
                     diamondIsTaken = true;
                 }
             }
 
             foreach(Rat rat in _ratList){
                 if(_cheese.boundingBox.Intersects(rat.boundingBox)){
-///
                     Console.WriteLine("collide with rat");
+
+                    //rat attack fx
+                    Game1.ratAttackFX.Play();
 
                     //respawn cheese to its starting tile
                     _cheese.TileX = _cheese.startingTileX;
@@ -700,6 +779,7 @@ namespace project4
 
                     if (levelMap.Rows[_cheese.TileY + direction].Columns[_cheese.TileX].accessible){
                         _cheese.Move(0, direction);
+                        Game1.walk.Play();
                     }
                 }
             }
@@ -719,6 +799,7 @@ namespace project4
 
                     if (levelMap.Rows[_cheese.TileY].Columns[_cheese.TileX + direction].accessible){
                         _cheese.Move(direction, 0);
+                        Game1.walk.Play();
                     }
                 }
             }

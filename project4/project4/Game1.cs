@@ -54,7 +54,16 @@ namespace project4
         public static SoundEffectInstance rat_attack;
         public static SoundEffectInstance rat_defeated;
         public static SoundEffectInstance end_game;
+        public static SoundEffectInstance bob_praat;
         private bool endGameAlreadyPlayed;
+
+        //FX
+        public static SoundEffectInstance walk;
+        public static SoundEffectInstance buttonSelect;
+        public static SoundEffectInstance assignmentCorrect;
+        public static SoundEffectInstance assignmentIncorrect;
+        public static SoundEffectInstance diamondTaken;
+        public static SoundEffectInstance ratAttackFX;
 
         public Game1()
             : base()
@@ -68,7 +77,7 @@ namespace project4
             //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             //
 
             _player = new Player(this);
@@ -92,6 +101,8 @@ namespace project4
                 instance.IsLooped = true;
                 instance.Volume = 0.1f;
                 instance.Play();
+
+                walk.IsLooped = true;
             }
 
             Console.WriteLine(klik_op_bob.State);
@@ -125,7 +136,18 @@ namespace project4
             begin_level3 = Content.Load<SoundEffect>(@"audio\voice\level3\begin_level3_new.wav").CreateInstance();
             rat_attack = Content.Load<SoundEffect>(@"audio\voice\level3\rat_attack_new.wav").CreateInstance();
             rat_defeated = Content.Load<SoundEffect>(@"audio\voice\level3\rat_defeated_new.wav").CreateInstance();
-            end_game = Content.Load<SoundEffect>(@"audio\voice\level3\end_game_new.wav").CreateInstance();           
+            end_game = Content.Load<SoundEffect>(@"audio\voice\level3\end_game_new.wav").CreateInstance();
+
+            bob_praat = Content.Load<SoundEffect>(@"audio\voice\bob_praat_new.wav").CreateInstance();           
+
+            //FX
+            walk = Content.Load<SoundEffect>(@"audio\fx\fx_walk.wav").CreateInstance();
+            buttonSelect = Content.Load<SoundEffect>(@"audio\fx\button_select.wav").CreateInstance();
+            assignmentCorrect = Content.Load<SoundEffect>(@"audio\fx\assignment_correct").CreateInstance();
+            assignmentIncorrect = Content.Load<SoundEffect>(@"audio\fx\assignment_incorrect").CreateInstance();
+            diamondTaken = Content.Load<SoundEffect>(@"audio\fx\diamond_taken").CreateInstance();
+            ratAttackFX = Content.Load<SoundEffect>(@"audio\fx\rat_attack").CreateInstance();
+
 
         }
        
@@ -166,14 +188,14 @@ namespace project4
                     }
 
                     if (_titleScreen.StartButton.IsClicked){
-                        //_cheese = new Cheese(this, 7, 4);
 
-                        //creates level, the integer determines which level will be loaded
+                        //button select fx
+                        Game1.buttonSelect.Play();
                         
                         if (DEBUG2)
                         {
                             //start level 2 immediately
-                            _currentLevel = new Level(this, _player, 2, 6, 1);
+                            _currentLevel = new Level(this, _player, 3, 6, 1);
                         }
                         else
                         {
@@ -189,6 +211,7 @@ namespace project4
 
                     //exit button
                     if (_titleScreen.ExitButton.IsClicked){
+
                         Exit();
                     }
                 }
@@ -200,6 +223,12 @@ namespace project4
                 {
                     _currentLevel.Dispose();
                     _currentLevel.ClearLists();
+
+                    if (!endGameAlreadyPlayed)
+                    {
+                        //play diamond taken fx
+                        Game1.diamondTaken.Play();
+                    }
 
                     switch (_currentLevel._currentLevelInt)
                     {
