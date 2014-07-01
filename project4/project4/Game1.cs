@@ -64,6 +64,7 @@ namespace project4
         public static SoundEffectInstance assignmentIncorrect;
         public static SoundEffectInstance diamondTaken;
         public static SoundEffectInstance ratAttackFX;
+        private EndScreen _endScreen;
 
         public Game1()
             : base()
@@ -77,7 +78,7 @@ namespace project4
             //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             //
 
             _player = new Player(this);
@@ -195,7 +196,7 @@ namespace project4
                         if (DEBUG2)
                         {
                             //start level 2 immediately
-                            _currentLevel = new Level(this, _player, 3, 6, 1);
+                            _currentLevel = new Level(this, _player, 4, 2, 6);
                         }
                         else
                         {
@@ -243,6 +244,8 @@ namespace project4
                             if(!endGameAlreadyPlayed){
                                 end_game.Play();
                                 endGameAlreadyPlayed = true;
+
+                                _endScreen = new EndScreen(this); 
                             }
 
                             Console.WriteLine("Level integer has unexpected value");
