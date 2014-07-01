@@ -78,7 +78,7 @@ namespace project4
             //set screen
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             //
 
             _player = new Player(this);
